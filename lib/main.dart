@@ -11,6 +11,41 @@ void main() {
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
+  final double motivation = 5;
+  final double sessionLength = 10;
+  final double timePeriod = 100;
+  final double maxVal = 100;
+
+  double calculateMidpoint() {
+    if (motivation < 3.5) {
+      return timePeriod / 4;
+    } else if (motivation >= 3.5 && motivation < 7) {
+      return timePeriod / 2;
+    } else {
+      return timePeriod * 3 / 4;
+    }
+  }
+  
+   double calculateGrowthRate() {
+  if (motivation < 3.5) {
+    return 0.06;
+  } else if (motivation >= 3.5 && motivation < 7) {
+    return 0.12;
+  } else {
+    return 0.20;
+  }
+}
+
+  //algorithm to baisically make the s curve but it doesnt rlly do the calendar stuff yet
+  
+List<double> sCurveValues(double maxVal, double midpoint, double growthRate, double endPeriod) {
+  List<double> values = [];
+  for (double t = 0; t <= endPeriod; t++) {
+    double sCurveValue = maxVal / (1 + ((maxVal - 1) / midpoint) * (1 - (1 / (1 + growthRate * t))));
+    values.add(sCurveValue);
+  }
+  return values;
+}
 
   @override
   Widget build(BuildContext context) {
