@@ -69,9 +69,14 @@ class MainApp extends StatelessWidget {
       }
 }
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +84,38 @@ class LoginPage extends StatelessWidget {
         title: Text('Login to your account'),
       ),
       body: Center(
-        child: Text('Welcome to the Second Route!'), //switch to username and password fields
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: Text(
+                'Please enter your username and password',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              width: 200,
+              child: Column(
+                children: [
+                  TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter username',
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter password',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -95,7 +131,10 @@ class CreateAccountPage extends StatelessWidget {
         title: Text('Create an Account'),
       ),
       body: Center(
-        child: Text('To create an account, we ask you to take a short quiz about your work/learning styles so we can personalize your schedule. To start the quiz, click the button below'), //switch to quiz 
+        child: SizedBox(
+          width: 800,
+          child: Text('To create an account, we ask you to take a short quiz about your work/learning styles so we can personalize your schedule. To start the quiz, click the button below'), //switch to quiz 
+        ),
       ),
     );
   }
