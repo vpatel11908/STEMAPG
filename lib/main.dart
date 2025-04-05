@@ -15,6 +15,7 @@ class MainApp extends StatelessWidget {
   final double sessionLength = 10;
   final double timePeriod = 100;
   final double maxVal = 100;
+  
 
   double calculateMidpoint() {
     if (motivation < 3.5) {
@@ -36,7 +37,7 @@ class MainApp extends StatelessWidget {
   }
 }
 
-  //algorithm to baisically make the s curve but it doesnt rlly do the calendar stuff yet
+  //algorithm to basically make the s curve but it doesnt really do the calendar stuff yet
   
 List<double> sCurveValues(double maxVal, double midpoint, double growthRate, double endPeriod) {
   List<double> values = [];
@@ -90,7 +91,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
                     onPressed: () {
                        Navigator.push(
                         context, 
-                        MaterialPageRoute(builder: (context) => const CreateAccountPage()),
+                        MaterialPageRoute(builder: (context) => CreateAccountPage()),
                     );
                     },
                     child: Text('Create Account'),
@@ -168,7 +169,78 @@ class CreateAccountPage extends StatelessWidget {
       body: Center(
         child: SizedBox(
           width: 800,
-          child: Text('To create an account, we ask you to take a short quiz about your work/learning styles so we can personalize your schedule. To start the quiz, click the button below'), //switch to quiz 
+          child: Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'To create an account, we ask you to take a short quiz about your work/learning styles so we can personalize your schedule. To start the quiz, click the arrow below.',
+                ),
+                SizedBox(height: 20), // Space between text and button
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const QuizPage()),
+                    );
+                  },
+                  child: Text('Start Quiz'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class QuizPage extends StatelessWidget {
+   const QuizPage({super.key});
+   @override
+   Widget build(BuildContext context) {
+     return Scaffold(
+
+       appBar: AppBar(
+        title: Text('Quiz'),
+       ),
+       body: Center(
+         child: Column(
+           mainAxisAlignment: MainAxisAlignment.center,
+           children: [
+            Padding(
+               padding: const EdgeInsets.only(bottom: 20.0),
+               child: Text(
+                'Please answer the following questions',
+                 style: TextStyle(fontSize: 20),
+               ),
+             ),
+             SizedBox(
+              width: 200,
+               child: Column(
+                 children: [
+                  Text('Insert quiz question here when the quiz is made'),
+                  SizedBox(height: 20),
+                   TextField(
+                     decoration: InputDecoration(
+                       border: OutlineInputBorder(),
+                       hintText: 'Enter your answer',
+                     ),
+                   ),
+                  SizedBox(height: 20),
+                  TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'insert question here',
+                      hintText: 'Enter your answer',
+                     ),
+                   ),
+                ],
+               ),
+            ),
+          ],
         ),
       ),
     );
