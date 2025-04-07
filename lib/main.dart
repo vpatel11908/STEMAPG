@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 void main() {
   runApp(
@@ -7,45 +8,18 @@ void main() {
       home: MainApp(),
     ),
   );
+  double motivation = 5;
+  double sessionLength = 1;
+  double timePeriod = 10;
+  double maxVal = 100;
+  List<double> curveValues = BackendSCurve.implement(motivation, sessionLength, timePeriod, maxVal);
+  print('$curveValues');
 }
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
-  final double motivation = 5;
-  final double sessionLength = 10;
-  final double timePeriod = 100;
-  final double maxVal = 100;
-
-  double calculateMidpoint() {
-    if (motivation < 3.5) {
-      return timePeriod / 4;
-    } else if (motivation >= 3.5 && motivation < 7) {
-      return timePeriod / 2;
-    } else {
-      return timePeriod * 3 / 4;
-    }
-  }
   
-   double calculateGrowthRate() {
-  if (motivation < 3.5) {
-    return 0.06;
-  } else if (motivation >= 3.5 && motivation < 7) {
-    return 0.12;
-  } else {
-    return 0.20;
-  }
-}
 
-  //algorithm to baisically make the s curve but it doesnt rlly do the calendar stuff yet
-  
-List<double> sCurveValues(double maxVal, double midpoint, double growthRate, double endPeriod) {
-  List<double> values = [];
-  for (double t = 0; t <= endPeriod; t++) {
-    double sCurveValue = maxVal / (1 + ((maxVal - 1) / midpoint) * (1 - (1 / (1 + growthRate * t))));
-    values.add(sCurveValue);
-  }
-  return values;
-}
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +64,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
                     onPressed: () {
                        Navigator.push(
                         context, 
-                        MaterialPageRoute(builder: (context) => const CreateAccountPage()),
+                        MaterialPageRoute(builder: (context) => CreateAccountPage()),
                     );
                     },
                     child: Text('Create Account'),
@@ -157,9 +131,6 @@ class _LoginPageState extends State<LoginPage> {
 }
 
 class CreateAccountPage extends StatelessWidget {
-  const CreateAccountPage({super.key});
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -172,5 +143,51 @@ class CreateAccountPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class BackendSCurve {
+  // Method to calculate the midpoint
+  static double calculateMidpoint(double motivation, double timePeriod) {
+    if (motivation < 3.5) {
+      return timePeriod / 4;
+    } else if (motivation >= 3.5 && motivation < 7) {
+      return timePeriod / 2;
+    } else {
+      return timePeriod * 3 / 4;
+    }
+  }
+
+  // Method to calculate the growth rate
+  static double calculateGrowthRate(double sessionLength) {
+    if (sessionLength < 3.5) {
+      return 0.06;
+    } else if (sessionLength >= 3.5 && sessionLength < 7) {
+      return 0.12;
+    } else {
+      return 0.20;
+    }
+  }
+
+  // Calcuates S-Curve values
+  static List<double> sCurveValues(double maxVal, double midpoint, double growthRate, double endPeriod) {
+    List<double> values = [];
+    for (double t = 0; t <= endPeriod; t++) {
+      double sCurveValue = maxVal / (1 + exp(-growthRate*(t-midpoint)));
+      values.add(sCurveValue);
+    }
+    return values;
+  }
+
+  // Implements S-Curve calculatoin
+  static List<double> implement(double sessionLength, double motivation, double maxVal, double timePeriod) {
+    // Calculates growth rate
+    double growthRate = calculateGrowthRate(sessionLength);
+
+    // Calculates midpoint
+    double midpoint = calculateMidpoint(motivation, timePeriod);
+
+    // Generates S-curve values
+    return sCurveValues(maxVal, midpoint, growthRate, timePeriod);
   }
 }
