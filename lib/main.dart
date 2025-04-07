@@ -18,8 +18,17 @@ void main() {
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
-  
 
+  //algorithm to basically make the s curve but it doesnt really do the calendar stuff yet
+  
+List<double> sCurveValues(double maxVal, double midpoint, double growthRate, double endPeriod) {
+  List<double> values = [];
+  for (double t = 0; t <= endPeriod; t++) {
+    double sCurveValue = maxVal / (1 + ((maxVal - 1) / midpoint) * (1 - (1 / (1 + growthRate * t))));
+    values.add(sCurveValue);
+  }
+  return values;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -139,12 +148,33 @@ class CreateAccountPage extends StatelessWidget {
       body: Center(
         child: SizedBox(
           width: 800,
-          child: Text('To create an account, we ask you to take a short quiz about your work/learning styles so we can personalize your schedule. To start the quiz, click the button below'), //switch to quiz 
+          child: Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'To create an account, we ask you to take a short quiz about your work/learning styles so we can personalize your schedule. To start the quiz, click the arrow below.',
+                ),
+                SizedBox(height: 20), // Space between text and button
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const QuizPage()),
+                    );
+                  },
+                  child: Text('Start Quiz'),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 }
+
 
 class BackendSCurve {
   // Method to calculate the midpoint
@@ -189,5 +219,56 @@ class BackendSCurve {
 
     // Generates S-curve values
     return sCurveValues(maxVal, midpoint, growthRate, timePeriod);
+  }
+}
+
+
+class QuizPage extends StatelessWidget {
+   const QuizPage({super.key});
+   @override
+   Widget build(BuildContext context) {
+     return Scaffold(
+
+       appBar: AppBar(
+        title: Text('Quiz'),
+       ),
+       body: Center(
+         child: Column(
+           mainAxisAlignment: MainAxisAlignment.center,
+           children: [
+            Padding(
+               padding: const EdgeInsets.only(bottom: 20.0),
+               child: Text(
+                'Please answer the following questions',
+                 style: TextStyle(fontSize: 20),
+               ),
+             ),
+             SizedBox(
+              width: 200,
+               child: Column(
+                 children: [
+                  Text('Insert quiz question here when the quiz is made'),
+                  SizedBox(height: 20),
+                   TextField(
+                     decoration: InputDecoration(
+                       border: OutlineInputBorder(),
+                       hintText: 'Enter your answer',
+                     ),
+                   ),
+                  SizedBox(height: 20),
+                  TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'insert question here',
+                      hintText: 'Enter your answer',
+                     ),
+                   ),
+                ],
+               ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
