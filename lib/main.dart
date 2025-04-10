@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stemcalendar/screens/questions_screen.dart';
 
 void main() {
   runApp(
@@ -48,8 +49,8 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
   return values;
 }
 
-  @override
-  Widget build(BuildContext context) {
+   @override
+     Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         
@@ -120,37 +121,53 @@ class _LoginPageState extends State<LoginPage> {
         title: Text('Login to your account'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20.0),
-              child: Text(
-                'Please enter your username and password',
-                style: TextStyle(fontSize: 20),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0), // Add padding around the entire content
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20.0),
+                child: Text(
+                  'Please enter your username and password',
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
-            ),
-            SizedBox(
-              width: 200,
-              child: Column(
-                children: [
-                  TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Enter username',
+              SizedBox(height: 20), // Space between text and input fields
+              SizedBox(
+                width: 300, // Increase width for better spacing
+                child: Column(
+                  children: [
+                    TextField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter username',
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Enter password',
+                    SizedBox(height: 20), // Space between username and password fields
+                    TextField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter password',
+                      ),
+                      obscureText: true, // Hide password input
                     ),
-                  ),
-                ],
+                    SizedBox(height: 20), // Space between password field and button
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const MainApp()),//change to some way to save the login info and move to the create task page
+                        //  Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateTaskPage()),);
+                        );
+                      },
+                      child: Text('Enter'),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -172,10 +189,10 @@ class CreateAccountPage extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(20.0),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  'To create an account, we ask you to take a short quiz about your work/learning styles so we can personalize your schedule. To start the quiz, click the arrow below.',
+                  'To create an account, we ask you to take a short quiz about your work/learning styles so we can personalize your schedule. To start the quiz, click the button below.',
                 ),
                 SizedBox(height: 20), // Space between text and button
                 ElevatedButton(
@@ -197,52 +214,97 @@ class CreateAccountPage extends StatelessWidget {
 }
 
 
-class QuizPage extends StatelessWidget {
+class QuizPage extends StatefulWidget {
    const QuizPage({super.key});
-   @override
-   Widget build(BuildContext context) {
-     return Scaffold(
+    @override
+    State<QuizPage> createState() => _QuizPageState(); 
+  }
+
+class _QuizPageState extends State<QuizPage> {
+  Widget? activeWidget;
+
+  @override 
+  void initState() {
+    super.initState();
+    activeWidget = Center(
+      child: Text('Quiz Page Content'),
+    );
+  }
+
+  void switchScreen() {
+    setState(() {
+     activeWidget = const QuestionsScreen();
+    });
+    }
+    
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
 
        appBar: AppBar(
         title: Text('Quiz'),
        ),
-       body: Center(
-         child: Column(
-           mainAxisAlignment: MainAxisAlignment.center,
-           children: [
-            Padding(
-               padding: const EdgeInsets.only(bottom: 20.0),
-               child: Text(
-                'Please answer the following questions',
-                 style: TextStyle(fontSize: 20),
-               ),
-             ),
-             SizedBox(
-              width: 200,
-               child: Column(
-                 children: [
-                  Text('Insert quiz question here when the quiz is made'),
-                  SizedBox(height: 20),
-                   TextField(
-                     decoration: InputDecoration(
-                       border: OutlineInputBorder(),
-                       hintText: 'Enter your answer',
-                     ),
-                   ),
-                  SizedBox(height: 20),
-                  TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'insert question here',
-                      hintText: 'Enter your answer',
-                     ),
-                   ),
-                ],
-               ),
+      body:
+       ListView(
+        physics: const BouncingScrollPhysics(),
+        children: [
+       Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0), // Add padding around the entire content
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Use min to fit the content
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start, // Align items to the start for better spacing
+            children: [
+         Padding(
+           padding: const EdgeInsets.only(bottom: 20.0),
+           child: Text(
+             'Please answer the following questions:',
+             style: TextStyle(fontSize: 20),
+           ),
+         ),
+         SizedBox(
+           width: MediaQuery.of(context).size.width * 0.50, // Set height to 80% of screen height
+           height: MediaQuery.of(context).size.height * 0.50, // Set height to 80% of screen height
+           child: Column(
+             crossAxisAlignment: CrossAxisAlignment.center, // Align items to the start for better spacing
+             mainAxisAlignment: MainAxisAlignment.start,
+             children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text('Insert quiz question here when the quiz is made'),
+          ),
+          SizedBox(height: 10), // Space between question and button
+          
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: ElevatedButton(
+              onPressed: () {},
+              child: Text('Answer 3'), // Change to the actual answer (each answer corresponds to a different category for the creation of the s-curve) 
+           ),
+          ),
+          
+          SizedBox(height: 30), // Space between button and next question
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Text('Another question to insert'),
+          ),
+          TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Enter your answer',
             ),
-          ],
+          ),
+             ],
+           ),
+         ),
+            ],
+          ),
         ),
+      ),
+        ],
       ),
     );
   }
 }
+
