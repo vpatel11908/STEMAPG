@@ -8,12 +8,14 @@ void main() {
       home: MainApp(),
     ),
   );
-  double motivation = 5;
+  double motivation = 10;
   double sessionLength = 1;
-  double timePeriod = 10;
+  double timePeriod = 100;
   double maxVal = 100;
-  List<double> curveValues = BackendSCurve.implement(motivation, sessionLength, timePeriod, maxVal);
-  print('$curveValues');
+  double totalLength = 100;
+  Calendar calendar = Calendar();
+  List<double> curveValues = calendar.generateCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength);
+  print('Minutes: $curveValues');
 }
 
 class MainApp extends StatelessWidget {
@@ -222,6 +224,30 @@ class BackendSCurve {
   }
 }
 
+class Calendar {
+  List<double> generateCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength){
+    List<double> slopes = [];
+    // Calculates the slope of the S-Curve at each time point by using the derivative
+    for (int t = 1; t < timePeriod; t++) {
+      double exponent = exp(-BackendSCurve.calculateGrowthRate(sessionLength)*(t-BackendSCurve.calculateMidpoint(motivation, timePeriod)));
+      double slope = (maxVal * BackendSCurve.calculateGrowthRate(sessionLength) * exponent) / pow(1 + exponent, 2);
+      slopes.add(slope);
+    }
+    // Adds all the slopes to a new list
+    double sum = 0;
+    for (int i = 0; i<slopes.length; i++){
+      sum += slopes[i];
+    }
+    // Normalizes the slopes to all represent the amount of minutes of work needed to be done at that point on the time interval (this will represent a day)
+    double sessionsAVGSlope = sum/totalLength;
+    for(int i = 0; i<slopes.length; i++){
+      slopes[i] = slopes[i]/sessionsAVGSlope;
+      slopes[i] *= 60;
+      slopes[i] = (slopes[i]).roundToDouble();
+    }
+    return slopes;
+  }
+}
 
 class QuizPage extends StatelessWidget {
    const QuizPage({super.key});
