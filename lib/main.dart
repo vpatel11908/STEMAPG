@@ -15,6 +15,7 @@ void main() {
   double maxVal = 100;
   double totalLength = 100;
   Calendar calendar = Calendar();
+  //Prints out the minutes of work to be done like each day --- the check for if it can fit within the allotted hours still needs to be added
   List<double> curveValues = calendar.generateCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength);
   print('Minutes: $curveValues');
 }
@@ -22,7 +23,7 @@ void main() {
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
-  //algorithm to basically make the s curve but it doesnt really do the calendar stuff yet
+  //algorithm to basically make the s curve 
   
 List<double> sCurveValues(double maxVal, double midpoint, double growthRate, double endPeriod) {
   List<double> values = [];
@@ -254,7 +255,7 @@ class BackendSCurve {
 class Calendar {
   List<double> generateCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength){
     List<double> slopes = [];
-    // Calculates the slope of the S-Curve at each time point by using the derivative
+    // Calculates the slope of the S-Curve at each time point by using the derivative (so like it takes the derivative of the s-curve function and then just plugs the numbers into the resulting equatoin)
     for (int t = 1; t < timePeriod; t++) {
       double exponent = exp(-BackendSCurve.calculateGrowthRate(sessionLength)*(t-BackendSCurve.calculateMidpoint(motivation, timePeriod)));
       double slope = (maxVal * BackendSCurve.calculateGrowthRate(sessionLength) * exponent) / pow(1 + exponent, 2);
