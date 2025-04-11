@@ -55,14 +55,16 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
                 padding: const EdgeInsets.only(bottom: 50.0),
                 child: Text(
                   'Variny Project Planner',
-                  style: TextStyle(fontSize: 30),
+                  style: TextStyle(
+                    fontSize: 30
+                    ),
               ),
                ),
               SizedBox(height: 20), // Add spacing between the text and the row
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
+                  ElevatedButton( //button to navigate to the login page
                     onPressed: () {
                       Navigator.push(
                       context, 
@@ -72,7 +74,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
                     child: Text('Login'),
                   ),
                   SizedBox(width: 40), // Add spacing between the buttons
-                  ElevatedButton(
+                  ElevatedButton( //button to navigate to the create account page
                     onPressed: () {
                        Navigator.push(
                         context, 
@@ -90,6 +92,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
       }
 }
 
+//Login page - this page is used to log in to an existing account, then navigate to the main app
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -97,6 +100,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+// Widget to log in to an account
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
@@ -108,10 +112,10 @@ class _LoginPageState extends State<LoginPage> {
         child: Padding(
           padding: const EdgeInsets.all(20.0), // Add padding around the entire content
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center, // Center the content vertically
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 20.0),
+                padding: const EdgeInsets.only(bottom: 20.0), // Space between icon and text
                 child: Text(
                   'Please enter your username and password',
                   style: TextStyle(fontSize: 20),
@@ -122,14 +126,14 @@ class _LoginPageState extends State<LoginPage> {
                 width: 300, // Increase width for better spacing
                 child: Column(
                   children: [
-                    TextField(
+                    TextField( //username field
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Enter username',
                       ),
                     ),
                     SizedBox(height: 20), // Space between username and password fields
-                    TextField(
+                    TextField( //password field
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Enter password',
@@ -142,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => const MainApp()),//change to some way to save the login info and move to the create task page
-                        //  Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateTaskPage()),);
+                        //  Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateTaskPage()),); (use this when this page is made)
                         );
                       },
                       child: Text('Enter'),
@@ -158,7 +162,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
+//Starts the proccess of creating an account by having the user start a work/learning style quiz
+// This page is the first step in creating an account
 class CreateAccountPage extends StatelessWidget {
+  const CreateAccountPage({super.key});
+
+//Widget to create an account by having the user start a work/learning style quiz
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -176,11 +186,11 @@ class CreateAccountPage extends StatelessWidget {
                   'To create an account, we ask you to take a short quiz about your work/learning styles so we can personalize your schedule. To start the quiz, click the button below.',
                 ),
                 SizedBox(height: 20), // Space between text and button
-                ElevatedButton(
+                ElevatedButton( // Add a button to start the quiz that navigates to the QuestionsScreen
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const QuizPage()),
+                      MaterialPageRoute(builder: (context) => const QuestionsScreen()),
                     );
                   },
                   child: Text('Start Quiz'),
@@ -266,97 +276,5 @@ class Calendar {
   }
 }
 
-class QuizPage extends StatefulWidget {
-   const QuizPage({super.key});
-    @override
-    State<QuizPage> createState() => _QuizPageState(); 
-  }
 
-class _QuizPageState extends State<QuizPage> {
-  Widget? activeWidget;
-
-  @override 
-  void initState() {
-    super.initState();
-    activeWidget = Center(
-      child: Text('Quiz Page Content'),
-    );
-  }
-
-  void switchScreen() {
-    setState(() {
-     activeWidget = const QuestionsScreen();
-    });
-    }
-    
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-
-       appBar: AppBar(
-        title: Text('Quiz'),
-       ),
-      body:
-       ListView(
-        physics: const BouncingScrollPhysics(),
-        children: [
-       Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0), // Add padding around the entire content
-          child: Column(
-            mainAxisSize: MainAxisSize.min, // Use min to fit the content
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start, // Align items to the start for better spacing
-            children: [
-         Padding(
-           padding: const EdgeInsets.only(bottom: 20.0),
-           child: Text(
-             'Please answer the following questions:',
-             style: TextStyle(fontSize: 20),
-           ),
-         ),
-         SizedBox(
-           width: MediaQuery.of(context).size.width * 0.50, // Set height to 80% of screen height
-           height: MediaQuery.of(context).size.height * 0.50, // Set height to 80% of screen height
-           child: Column(
-             crossAxisAlignment: CrossAxisAlignment.center, // Align items to the start for better spacing
-             mainAxisAlignment: MainAxisAlignment.start,
-             children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Text('Insert quiz question here when the quiz is made'),
-          ),
-          SizedBox(height: 10), // Space between question and button
-          
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Text('Answer 3'), // Change to the actual answer (each answer corresponds to a different category for the creation of the s-curve) 
-           ),
-          ),
-          
-          SizedBox(height: 30), // Space between button and next question
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
-            child: Text('Another question to insert'),
-          ),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Enter your answer',
-            ),
-          ),
-             ],
-           ),
-         ),
-            ],
-          ),
-        ),
-      ),
-        ],
-      ),
-    );
-  }
-}
 

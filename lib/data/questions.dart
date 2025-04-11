@@ -1,27 +1,27 @@
 
-class QuizQuestion {
-  final String question;
-  final List<String> answers;
-  final int? selectedAnswer;
-
-  QuizQuestion({
+class QuizQuestion { // This class represents a quiz question with its possible answers and the selected answer.
+  final String question; // The question text.
+  final List<String> answers; // The list of possible answers.
+  String? selectedAnswer; // The answer selected by the user.
+ 
+  QuizQuestion({  // Constructor to initialize the question, answers, and selected answer.
     required this.question,
     required this.answers,
     this.selectedAnswer,
   });
 
-  static List<QuizQuestion> questions = [
+  static List<QuizQuestion> questions = [ // A static list of quiz questions.
   QuizQuestion(
     question: 'How many hours do you want to work each day?',
     answers: [
-      '1-3',
-      '3-4',
-      '3-5',
+      '1 to 2',
+      '3 to 4',
+      '4 to 5',
     ],
     selectedAnswer: null,
   ),
   QuizQuestion(
-    question: 'What is your current motivation level?',
+    question: 'What is your current motivation level on a scale of 1 to 10?',
     answers: [
       '1',
       '2',
@@ -37,7 +37,7 @@ class QuizQuestion {
     selectedAnswer: null,
   ),
  QuizQuestion(
-    question: 'Do you prefer to work for long stretches at a time or in short bursts?',
+    question: 'How much do you prefer to work for long stretches at a time as opposed to in short bursts on a scale from 1 to 10?',
     answers: [
       '1',
       '2',
@@ -52,6 +52,7 @@ class QuizQuestion {
     ],
     selectedAnswer: null,
   ),
+  //Add more questions here when the quiz is finalzed
 ];
 }
 
