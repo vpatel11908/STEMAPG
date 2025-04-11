@@ -9,7 +9,7 @@ void main() {
       home: MainApp(),
     ),
   );
-  double motivation = 10;
+  double motivation = 1;
   double sessionLength = 1;
   double timePeriod = 100;
   double maxVal = 100;
@@ -207,7 +207,7 @@ class CreateAccountPage extends StatelessWidget {
 
 
 class BackendSCurve {
-  // Method to calculate the midpoint
+  // Method to calculate the midpoint - the motivation determins this like the time period is just for the sake of keeping a standardized midpoint
   static double calculateMidpoint(double motivation, double timePeriod) {
     if (motivation < 3.5) {
       return timePeriod / 4;
@@ -255,13 +255,13 @@ class BackendSCurve {
 class Calendar {
   List<double> generateCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength){
     List<double> slopes = [];
-    // Calculates the slope of the S-Curve at each time point by using the derivative (so like it takes the derivative of the s-curve function and then just plugs the numbers into the resulting equatoin)
+    // calculates the slope of the S-Curve at each time point by using the derivative (so like it takes the derivative of the s-curve function and then just plugs the numbers into the resulting equatoin)
     for (int t = 1; t < timePeriod; t++) {
       double exponent = exp(-BackendSCurve.calculateGrowthRate(sessionLength)*(t-BackendSCurve.calculateMidpoint(motivation, timePeriod)));
       double slope = (maxVal * BackendSCurve.calculateGrowthRate(sessionLength) * exponent) / pow(1 + exponent, 2);
       slopes.add(slope);
     }
-    // Adds all the slopes to a new list
+    // adds all the slopes to a new list
     double sum = 0;
     for (int i = 0; i<slopes.length; i++){
       sum += slopes[i];
