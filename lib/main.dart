@@ -38,7 +38,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
     return Scaffold(
       appBar: AppBar(
         
-      ),  
+      ),
       body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -92,7 +92,9 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
       }
 }
 
-//Login page - this page is used to log in to an existing account, then navigate to the main app
+//Login page - this page is used to log in to an existing 
+//account, then navigate to the main app (might get rid of 
+//this and store the data locally)
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -104,6 +106,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
+    final textController = TextEditingController();
+    final secondController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         title: Text('Login to your account'),
@@ -123,30 +127,35 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 20), // Space between text and input fields
               SizedBox(
-                width: 300, // Increase width for better spacing
+                width: 300,
                 child: Column(
                   children: [
                     TextField( //username field
+                      controller: textController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Enter username',
                       ),
                     ),
                     SizedBox(height: 20), // Space between username and password fields
-                    TextField( //password field
+                    TextField( //password field 
+                      controller: secondController, 
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Enter password',
                       ),
-                      obscureText: true, // Hide password input
+                      obscureText: true, // Hides the password input
                     ),
-                    SizedBox(height: 20), // Space between password field and button
+                    SizedBox(height: 20), 
                     ElevatedButton(
                       onPressed: () {
+                        var username = textController.text;
+                        var password = secondController.text;
+                        print('Username: $username');
+                        print('Password: $password');
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => const MainApp()),//change to some way to save the login info and move to the create task page
-                        //  Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateTaskPage()),); (use this when this page is made)
                         );
                       },
                       child: Text('Enter'),
@@ -185,8 +194,8 @@ class CreateAccountPage extends StatelessWidget {
                 Text(
                   'To create an account, we ask you to take a short quiz about your work/learning styles so we can personalize your schedule. To start the quiz, click the button below.',
                 ),
-                SizedBox(height: 20), // Space between text and button
-                ElevatedButton( // Add a button to start the quiz that navigates to the QuestionsScreen
+                SizedBox(height: 20), 
+                ElevatedButton( // button to start the quiz that navigates to the QuestionsScreen
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -276,5 +285,4 @@ class Calendar {
   }
 }
 
-
-
+//make the quiz page a part of settings tab, get rid of create account & login page

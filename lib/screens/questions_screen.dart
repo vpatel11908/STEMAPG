@@ -16,7 +16,6 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
     super.initState();
     activeWidget = const QuestionsScreen();
     switchScreen();
-    // Initialize any data or state here if needed
   }
 
   void switchScreen() {
@@ -42,20 +41,20 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const SizedBox(height: 20),
-            // Loop through and display questions with answer buttons
+            // Loops through and displays questions with answer buttons
             for (var i = 0; i < QuizQuestion.questions.length; i++) ...[
                 Text( //displays the question
                   QuizQuestion.questions[i].question,
                   style: const TextStyle(fontSize: 12),
                 ),
-                for (var j = 0; j < QuizQuestion.questions[i].answers.length; j++)
-                  ElevatedButton( //button to select an answer
+                for (var j = 0; j < QuizQuestion.questions[i].answers.length; j++) //makes a seperate button for each answer in the list of answers
+                  ElevatedButton(
                     onPressed: () {
                       setState(() {
                         QuizQuestion.questions[i].selectedAnswer = QuizQuestion.questions[i].answers[j];
                       });
                     },
-                    style: ElevatedButton.styleFrom( //changes the color of the button when selected
+                    style: ElevatedButton.styleFrom( //changes the color of the button to blue when it is selected
                       backgroundColor: QuizQuestion.questions[i].selectedAnswer == QuizQuestion.questions[i].answers[j]
                           ? Colors.blue.withAlpha(128)
                           : const Color.fromARGB(255, 36, 4, 242).withAlpha(128),
@@ -66,7 +65,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                       style: const TextStyle(fontSize: 12),
                     ),
                     ),
-                const SizedBox(height: 10), // Add spacing between questions
+                const SizedBox(height: 10), 
               ],
         Center (
         child: Column(
@@ -83,7 +82,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                   children: [ ...[
                     for (var i = 6; i <= 11; i++) ...[
                       CheckboxWidget(),
-                      Text('$i:00 AM '),
+                      Text('$i:00 AM '), //makes checkboxes for each hour in the morning, starting at 6:00 AM
                     ],
                   ],
                   ],
@@ -91,7 +90,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                 Row(
                   children: [
                     CheckboxWidget(),
-                    const Text('12:00 PM'),
+                    const Text('12:00 PM'), //handles special case that is the 12:00 PM checkbox
                   ],
                 ),
                 ],
@@ -100,7 +99,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                   children: [ 
                     for (var i = 1; i <= 10; i++) ...[
                       CheckboxWidget(),
-                      Text('$i:00 PM '),
+                      Text('$i:00 PM '), //makes checkboxes for each hour in the afternoon after 12 PM and until 10 PM
                     ],
                   ],
                 ),
@@ -121,6 +120,8 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   }
 }
 
+
+// allows the checkboxes to change states when clicked to appear checked or unchecked, as well as stores the data gained from this question
 class CheckboxWidget extends StatefulWidget {
   const CheckboxWidget({super.key});
 

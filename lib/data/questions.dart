@@ -10,7 +10,7 @@ class QuizQuestion { // This class represents a quiz question with its possible 
     this.selectedAnswer,
   });
 
-  static List<QuizQuestion> questions = [ // A static list of quiz questions.
+  static List<QuizQuestion> questions = [ // A list of instances of the QuizQuestion class to be displayed on the quiz page.
   QuizQuestion(
     question: 'How many hours do you want to work each day?',
     answers: [
