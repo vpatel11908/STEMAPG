@@ -61,7 +61,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
                     ),
               ),
                ),
-              SizedBox(height: 20), // Add spacing between the text and the row
+              SizedBox(height: 20), 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -74,8 +74,8 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
                     },
                     child: Text('Login'),
                   ),
-                  SizedBox(width: 40), // Add spacing between the buttons
-                  ElevatedButton( //button to navigate to the create account page
+                  SizedBox(width: 40), 
+                  ElevatedButton( 
                     onPressed: () {
                        Navigator.push(
                         context, 
@@ -115,18 +115,18 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(20.0), // Add padding around the entire content
+          padding: const EdgeInsets.all(20.0), 
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center, // Center the content vertically
+            mainAxisAlignment: MainAxisAlignment.center, 
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 20.0), // Space between icon and text
+                padding: const EdgeInsets.only(bottom: 20.0), 
                 child: Text(
                   'Please enter your username and password',
                   style: TextStyle(fontSize: 20),
                 ),
               ),
-              SizedBox(height: 20), // Space between text and input fields
+              SizedBox(height: 20), 
               SizedBox(
                 width: 300,
                 child: Column(
@@ -138,14 +138,14 @@ class _LoginPageState extends State<LoginPage> {
                         hintText: 'Enter username',
                       ),
                     ),
-                    SizedBox(height: 20), // Space between username and password fields
+                    SizedBox(height: 20), 
                     TextField( //password field 
                       controller: secondController, 
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Enter password',
                       ),
-                      obscureText: true, // Hides the password input
+                      obscureText: true, 
                     ),
                     SizedBox(height: 20), 
                     ElevatedButton(
