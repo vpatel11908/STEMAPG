@@ -31,34 +31,41 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
               decoration: const InputDecoration(
                 labelText: 'Project Name',
                 border: OutlineInputBorder(),
-                hintText: ('Enter the name of the project'),
 
               ),
         ),
+         SizedBox(height: 20),
         TextField(
               controller: dateController,
               decoration: const InputDecoration(
-                labelText: 'Project Name',
+                labelText: 'Due date of the Project',
                 border: OutlineInputBorder(),
-                hintText: ('Enter the due date of the project'),
 
               ),
         ),
+         SizedBox(height: 20),
         TextField(
               controller: lengthController,
               decoration: const InputDecoration(
-                labelText: 'Project Name',
+                labelText: 'Estimated Length of the Project',
                 border: OutlineInputBorder(),
-                hintText: ('Enter the number of hours that this project should take to complete'),
 
               ),
         ),
+        SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {
             setState(() {
               activeWidget = const MakeNewTaskPage();
             });
-            Projects(nameController.text, dateController.text, lengthController.text);
+            var project = Projects(nameController.text, dateController.text, lengthController.text);
+            //store the data somewhere when we figure that out
+            print(nameController.text);
+            print(project.getName());
+            print(dateController.text);
+            print(project.getProjectDueDate());
+            print(lengthController.text);
+            print(project.getDuration());
           }, 
           child: const Text('Create Task'),
           )

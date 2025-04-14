@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stemcalendar/screens/make_new_task.dart';
 import 'dart:math';
 import 'package:stemcalendar/screens/questions_screen.dart';
 
@@ -69,10 +70,10 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
                     onPressed: () {
                       Navigator.push(
                       context, 
-                      MaterialPageRoute(builder: (context) => const LoginPage()),
+                      MaterialPageRoute(builder: (context) => const MakeNewTaskPage()),
                     );
                     },
-                    child: Text('Login'),
+                    child: Text('Make a new task'),
                   ),
                   SizedBox(width: 40), 
                   ElevatedButton( 
