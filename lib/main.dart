@@ -238,7 +238,6 @@ class BackendSCurve {
       return 0.20;
     }
   }
-
   // Calcuates S-Curve values
   static List<double> sCurveValues(double maxVal, double midpoint, double growthRate, double endPeriod) {
     List<double> values = [];

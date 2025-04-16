@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stemcalendar/data/projects.dart';
+import 'package:stemcalendar/screens/calendar_page.dart';
 
 class MakeNewTaskPage extends StatefulWidget {
   const MakeNewTaskPage({super.key});
@@ -56,9 +57,9 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
         ElevatedButton(
           onPressed: () {
             setState(() {
-              activeWidget = const MakeNewTaskPage();
+              MaterialPageRoute(builder: (context) => const CalendarPage());
             });
-            var project = Projects(nameController.text, dateController.text, lengthController.text);
+            var project = Project(nameController.text, dateController.text, lengthController.text);
             //store the data somewhere when we figure that out
             print(nameController.text);
             print(project.getName());
@@ -66,6 +67,8 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
             print(project.getProjectDueDate());
             print(lengthController.text);
             print(project.getDuration());
+
+            project.addToProjectList(project);
           }, 
           child: const Text('Create Task'),
           )
@@ -75,3 +78,7 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
     );
   }
 }
+
+// how to store data:
+ //hash maps?
+ // SQ Lite - room api? -> gives you methods to use?
