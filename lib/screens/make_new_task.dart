@@ -56,11 +56,7 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
         SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {
-            setState(() {
-              MaterialPageRoute(builder: (context) => const CalendarPage());
-            });
-            var project = Project(nameController.text, dateController.text, lengthController.text);
-            //store the data somewhere when we figure that out
+            var project = Project(nameController.text, dateController.text, lengthController.text); //stores the data in the project class
             print(nameController.text);
             print(project.getName());
             print(dateController.text);
@@ -69,9 +65,14 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
             print(project.getDuration());
 
             project.addToProjectList(project);
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CalendarPage()),
+            );
           }, 
           child: const Text('Create Task'),
-          )
+        )
           ],
         ),
       ),

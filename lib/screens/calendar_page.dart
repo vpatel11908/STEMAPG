@@ -8,7 +8,7 @@ class CalendarPage extends StatefulWidget {
 
   @override
   State<CalendarPage> createState() => _CalendarPageState();
-
+  
   }
 
 class _CalendarPageState extends State<CalendarPage> {
@@ -29,18 +29,21 @@ class _CalendarPageState extends State<CalendarPage> {
             Column(
               children: <Widget>[
                 Card(
-                  child: ListTile(
-                    title: Text(Project.projectList[0].getName()),
-                    subtitle: Text(Project.projectList[0].getProjectDueDate()),
-                    trailing: Text(Project.projectList[0].getDuration()),
-                    /** 
-                     * Add this in when a view project page is created
-                    onTap: () {
-                      setState(() {
-                        activeWidget = const ViewProjectPage();
-                      });
-                    },
-                    */
+                  child: Column( 
+                    children: Project.projectList.map((project) => ListTile( 
+                      //display the list of projects as cards that can be clicked on to view the project page
+                      title: Text(project.getName()),
+                      subtitle: Text(project.getProjectDueDate()),
+                      trailing: Text(project.getDuration()),
+                      /** 
+                       * Add this in when a view project page is created
+                      onTap: () {
+                        setState(() {
+                          activeWidget = const ViewProjectPage();
+                        });
+                      },
+                      */
+                    )).toList(),
                   ),
                 ),
                 ElevatedButton(
@@ -62,5 +65,5 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
         ),
     );
-  }   
+  } 
 }
