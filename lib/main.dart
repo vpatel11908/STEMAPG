@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stemcalendar/screens/calendar_page.dart';
 import 'package:stemcalendar/screens/make_new_task.dart';
 import 'dart:math';
 import 'package:stemcalendar/screens/questions_screen.dart';
@@ -36,7 +37,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
 }
 
    @override
-     Widget build(BuildContext context) {
+     Widget build(BuildContext context) { //the home page of the app
     return Scaffold(
       appBar: AppBar(
         
@@ -48,7 +49,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
               Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),
                 child: Icon(
-                  Icons.edit_calendar, // will be changed to the logo once we make one
+                  Icons.edit_calendar, // will be changed to the logo if we make one
                   color: Color.fromARGB(255, 70, 52, 237),
                   size: 150,
                 ),
@@ -66,7 +67,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton( //button to navigate to the login page
+                  ElevatedButton( //button to navigate to the make new task page
                     onPressed: () {
                       Navigator.push(
                       context, 
@@ -76,11 +77,11 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
                     child: Text('Make a new task'),
                   ),
                   SizedBox(width: 40), 
-                  ElevatedButton( 
+                  ElevatedButton( //button to navigate to the calendar page
                     onPressed: () {
                        Navigator.push(
                         context, 
-                        MaterialPageRoute(builder: (context) => CreateAccountPage()),
+                        MaterialPageRoute(builder: (context) => CalendarPage()),
                     );
                     },
                     child: Text('Create Account'),
