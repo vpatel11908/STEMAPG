@@ -8,7 +8,6 @@ class CalendarPage extends StatefulWidget {
 
   @override
   State<CalendarPage> createState() => _CalendarPageState();
-  
   }
 
 class _CalendarPageState extends State<CalendarPage> {
@@ -28,25 +27,24 @@ class _CalendarPageState extends State<CalendarPage> {
           children: <Widget>[
             Column(
               children: <Widget>[
+                for (int i = 0; i < Project.projectList.length; i++)
+                //display the list of projects as cards that can be clicked on to view the project page
                 Card(
-                  child: Column( 
-                    children: Project.projectList.map((project) => ListTile( 
-                      //display the list of projects as cards that can be clicked on to view the project page
-                      title: Text(project.getName()),
-                      subtitle: Text(project.getProjectDueDate()),
-                      trailing: Text(project.getDuration()),
-                      /** 
-                       * Add this in when a view project page is created
-                      onTap: () {
-                        setState(() {
-                          activeWidget = const ViewProjectPage();
-                        });
-                      },
-                      */
-                    )).toList(),
+                  child: ListTile(
+                    title: Text(Project.projectList[i].getName()),
+                    subtitle: Text(Project.projectList[i].getProjectDueDate()),
+                    trailing: Text(Project.projectList[i].getDuration()),
+                    /*
+                    Add this when the project page is created
+                    onTap: () {
+                      setState(() {
+                        activeWidget = const ViewProjectPage();
+                      });
+                    },
+                    */
                   ),
                 ),
-                ElevatedButton(
+                ElevatedButton( //button to add a new project
                   onPressed: () {
                     setState(() {
                       Navigator.push(
@@ -57,7 +55,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       );
                     });
                   },
-                  child: const Text('Add a new task'),
+                  child: const Text('Add a new Project'),
                 ),
               ],
             ),
