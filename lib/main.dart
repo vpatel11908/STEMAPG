@@ -285,6 +285,20 @@ class Calendar {
     }
     return slopes;
   }
+  List<double> fixCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength, List<double> hoursAvailable){
+    List<double> slopes = generateCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength);
+    //goes thru every i value and checks if the amount of work hours scheduled for that day are greater than the hours the person is available
+    for (int i = 0; i<slopes.length; i++){
+      // if the amount of hours scheduled cannot be fit they will be split up evenely among the remaining days and subtracted from the current day (where the overflow exists)
+      if (slopes[i] > hoursAvailable[i]){
+        for(int j = i+1; i<slopes.length; j++){
+          slopes[j] = slopes[j] + (slopes[i]/(slopes.length-i+1));
+        }
+        slopes[i] = hoursAvailable[i];
+      }
+    }
+    return slopes;
+  }
 }
 
 //make the quiz page a part of settings tab, get rid of create account & login page
