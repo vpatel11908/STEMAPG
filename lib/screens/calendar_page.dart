@@ -21,47 +21,61 @@ class _CalendarPageState extends State<CalendarPage> {
       appBar: AppBar(
         title: const Text('Calendar Page'),
       ),
-      body: Center(
-        child: 
-        Column(
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                for (int i = 0; i < Project.projectList.length; i++)
-                //display the list of projects as cards that can be clicked on to view the project page
-                Card(
-                  child: ListTile(
-                    title: Text(Project.projectList[i].getName()),
-                    subtitle: Text(Project.projectList[i].getProjectDueDate()),
-                    trailing: Text(Project.projectList[i].getDuration()),
-                    /*
-                    Add this when the project page is created
-                    onTap: () {
+      body: 
+      ListView(
+        physics: const BouncingScrollPhysics(),
+        children: [
+        Center(
+          child: 
+          Column(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  for (int i = 0; i < Project.projectList.length; i++)
+                  //display the list of projects as cards that can be clicked on to view the project page
+                  Card(
+                    child: ListTile( 
+                      title: Text(Project.projectList[i].getName()),
+                      subtitle: Text(Project.projectList[i].getProjectDueDate()),
+                      trailing: Text(Project.projectList[i].getDuration()),
+                      /*
+                      Add this when the project page is created
+                      onTap: () {
+                        setState(() {
+                          activeWidget = const ViewProjectPage();
+                        });
+                      },
+                      */
+                    ),
+                  ),
+                  ElevatedButton( //button to add a new project
+                    onPressed: () {
                       setState(() {
-                        activeWidget = const ViewProjectPage();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MakeNewTaskPage(),
+                          ),
+                        );
                       });
                     },
-                    */
+                    child: const Text('Add a new Project'),
                   ),
-                ),
-                ElevatedButton( //button to add a new project
-                  onPressed: () {
-                    setState(() {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MakeNewTaskPage(),
-                        ),
-                      );
-                    });
-                  },
-                  child: const Text('Add a new Project'),
-                ),
-              ],
-            ),
-          ],
+                  ElevatedButton( //button to go back to the main page
+                    onPressed: () {
+                      setState(() {
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: const Text('Back to Main Page'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-        ),
+      ],
+      ),
     );
   } 
 }
