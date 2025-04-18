@@ -57,6 +57,19 @@ class _CalendarPageState extends State<CalendarPage> {
                   },
                   child: const Text('Add a new Project'),
                 ),
+                ElevatedButton( 
+                  onPressed: () {
+                    setState(() {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CalendarInfo(),
+                        ),
+                      );
+                    });
+                  },
+                  child: const Text('Calendar Info'),
+                ),
               ],
             ),
           ],
@@ -86,7 +99,12 @@ class _CalendarInfo extends State<CalendarInfo> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  activeWidget = const CalendarInfo();
+                  Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CalendarPage(),
+                        ),
+                      );
                 });
               },
               child: const Text('Go to Calendar Page'),
