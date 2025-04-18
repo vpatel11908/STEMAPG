@@ -284,6 +284,18 @@ class Calendar {
     }
     return slopes;
   }
+  List<double> fixCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength, List<double> hoursAvailable){
+    List<double> slopes = generateCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength);
+    for (int i = 0; i<slopes.length; i++){
+      if (slopes[i] > hoursAvailable[i]){
+        for(int j = i+1; i<slopes.length; j++){
+          slopes[j] = slopes[j] + (slopes[i]/(slopes.length-i+1));
+        }
+        slopes[i] = hoursAvailable[i];
+      }
+    }
+    return slopes;
+  }
 }
 
 //make the quiz page a part of settings tab, get rid of create account & login page
