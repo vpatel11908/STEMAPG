@@ -16,9 +16,13 @@ void main() {
   double timePeriod = 100;
   double maxVal = 100;
   double totalLength = 100;
+  List<double> hoursAvailable = [];
+  for(int i = 0; i<100; i++){
+    hoursAvailable.add(100);
+  }
   Calendar calendar = Calendar();
   //Prints out the minutes of work to be done like each day --- the check for if it can fit within the allotted hours still needs to be added
-  List<double> curveValues = calendar.generateCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength);
+  List<double> curveValues = calendar.fixCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength, hoursAvailable);
   print('Minutes: $curveValues');
 }
 
@@ -291,7 +295,7 @@ class Calendar {
     for (int i = 0; i<slopes.length; i++){
       // if the amount of hours scheduled cannot be fit they will be split up evenely among the remaining days and subtracted from the current day (where the overflow exists)
       if (slopes[i] > hoursAvailable[i]){
-        for(int j = i+1; i<slopes.length; j++){
+        for(int j = i+1; j<slopes.length; j++){
           slopes[j] = slopes[j] + (slopes[i]/(slopes.length-i+1));
         }
         slopes[i] = hoursAvailable[i];
