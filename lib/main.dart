@@ -88,7 +88,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
                         MaterialPageRoute(builder: (context) => CalendarPage()),
                     );
                     },
-                    child: Text('Create Account'),
+                    child: Text('Calendar'),
                   ),
                 ],
               ),

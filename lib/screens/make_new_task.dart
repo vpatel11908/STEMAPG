@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stemcalendar/data/projects.dart';
+import 'package:stemcalendar/main.dart';
 import 'package:stemcalendar/screens/calendar_page.dart';
 
 class MakeNewTaskPage extends StatefulWidget {
@@ -20,6 +21,15 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
     TextEditingController nameController = TextEditingController();
     TextEditingController dateController = TextEditingController();
     TextEditingController lengthController = TextEditingController();
+
+    void finishProjectCreation() {
+    Navigator.pushAndRemoveUntil<MainApp>(
+    context,
+    MaterialPageRoute<MainApp>(builder: (BuildContext context) => const CalendarPage()),
+    (Route<dynamic> route) => false,
+    );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Make New Project'),
@@ -60,11 +70,14 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
           onPressed: () {
             var project = Project(nameController.text, dateController.text, lengthController.text); //stores the data in the project class
             project.addToProjectList(project); //adds the project to the list so it can be displayed on the calendar page
-
+            finishProjectCreation();
+            /*
             Navigator.push( //goes back to the calendar page
               context,
               MaterialPageRoute(builder: (context) => const CalendarPage()),
+
             );
+            */
           }, 
           child: const Text('Create Task'),
         )
@@ -74,6 +87,8 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
     );
   }
 }
+
+
 
 // how to store data:
  //hash maps?

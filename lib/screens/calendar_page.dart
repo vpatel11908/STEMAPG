@@ -21,7 +21,11 @@ class _CalendarPageState extends State<CalendarPage> {
       appBar: AppBar(
         title: const Text('Calendar Page'),
       ),
-      body: Center(
+      body:
+      ListView(
+        physics: const BouncingScrollPhysics(),
+        children: [
+      Center( 
         child: 
         Column(
           children: <Widget>[
@@ -75,42 +79,7 @@ class _CalendarPageState extends State<CalendarPage> {
           ],
         ),
         ),
-    );
-  } 
-}
-class CalendarInfo extends StatefulWidget {
-  const CalendarInfo({super.key});
-    @override
-  State<CalendarInfo> createState() => _CalendarInfo();
-  }
-
-class _CalendarInfo extends State<CalendarInfo> {
-  Widget? activeWidget;
-@override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Calendar Info'),
-      ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            const Text('This is the calendar info page'),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CalendarPage(),
-                        ),
-                      );
-                });
-              },
-              child: const Text('Go to Calendar Page'),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }
