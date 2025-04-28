@@ -51,12 +51,13 @@ class Project extends Calendar {
   // Calculate timePeriod as number of days until due date 
   DateTime now = DateTime.now();
   DateTime dueDate = DateTime.parse(projectDueDate); // has to be in 'yyyy-MM-dd' format otherwise it wont work
-  int timePeriod = dueDate.difference(now).inDays;
+  double timePeriod = dueDate.difference(now).inDays.toDouble();
+  
 
   // Total work time in minutes (used to be in hours)
   int totalLength = (double.parse(duration) * 60).round();
 
-  return generateCalendar(sessionLength, timePeriod, maxVal, motivation,totalLength);
+  return generateCalendar(sessionLength,  timePeriod, maxVal, motivation,totalLength);
 }
 
 }
