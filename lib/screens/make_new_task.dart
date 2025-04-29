@@ -39,6 +39,7 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text('Enter the name of this project:'),
             TextField( //allows the user to enter the name of the project
               controller: nameController,
               decoration: const InputDecoration(
@@ -48,6 +49,7 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
               ),
         ),
          SizedBox(height: 20),
+         Text('Enter the due date of the project in the yyyy-MM-dd format:'),
         TextField( //allows the user to enter the due date of the project
               controller: dateController,
               decoration: const InputDecoration(
@@ -57,6 +59,7 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
               ),
         ),
          SizedBox(height: 20),
+         Text('Enter the estimated length of the project in hours:'),
         TextField( //allows the user to enter the estimated length of the project
               controller: lengthController,
               decoration: const InputDecoration(
@@ -88,8 +91,7 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
   }
 }
 
-
-
 // how to store data:
- //hash maps?
- // SQ Lite - room api? -> gives you methods to use?
+//hash maps? - linked hash map to store data in the order it was added
+//shared preferences - stores data in key value pairs
+// SQ Lite - room api? - gives you methods to use?
