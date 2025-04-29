@@ -24,6 +24,7 @@ void main() {
   //Prints out the minutes of work to be done like each day --- the check for if it can fit within the allotted hours still needs to be added
   List<double> curveValues = calendar.fixCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength, hoursAvailable);
   print('Minutes: $curveValues');
+  
 }
 
 class MainApp extends StatelessWidget {
@@ -46,7 +47,11 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
       appBar: AppBar(
         
       ),
-      body: Center(
+      body:
+      ListView(
+        physics: const BouncingScrollPhysics(),
+        children: [
+        Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -95,7 +100,9 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
             ],
           ),
         ),
-      );
+        ]
+      )
+    );
       }
 }
 
