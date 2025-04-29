@@ -16,9 +16,13 @@ void main() {
   double timePeriod = 100;
   double maxVal = 100;
   double totalLength = 100;
+  List<double> hoursAvailable = [];
+  for(int i = 0; i<100; i++){
+    hoursAvailable.add(100);
+  }
   Calendar calendar = Calendar();
   //Prints out the minutes of work to be done like each day --- the check for if it can fit within the allotted hours still needs to be added
-  List<double> curveValues = calendar.generateCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength);
+  List<double> curveValues = calendar.fixCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength, hoursAvailable);
   print('Minutes: $curveValues');
   
 }
@@ -237,7 +241,7 @@ class BackendSCurve {
   }
 
   // Method to calculate the growth rate
-  static double calculateGrowthRate(double sessionLength) {
+  static double calculateGrowthRate(sessionLength) {
     if (sessionLength < 3.5) {
       return 0.06;
     } else if (sessionLength >= 3.5 && sessionLength < 7) {
@@ -270,7 +274,23 @@ class BackendSCurve {
 }
 
 class Calendar {
-  List<double> generateCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength){
+  double getSessionLength(double sessionLength) {
+    return sessionLength;
+  }
+  double getMotivation(double motivation) {
+    return motivation;
+  }
+  double getMaxVal(double maxVal) {
+    return maxVal;
+  }
+  double getTimePeriod(double timePeriod) {
+    return timePeriod;
+  }
+  double getTotalLength(double totalLength) {
+    return totalLength;
+  }
+  // Generates the calendar based on the S-Curve values and the time period
+  List<double> generateCalendar(double sessionLength, double timePeriod, maxVal, double motivation, totalLength){
     List<double> slopes = [];
     // calculates the slope of the S-Curve at each time point by using the derivative (so like it takes the derivative of the s-curve function and then just plugs the numbers into the resulting equatoin)
     for (int t = 1; t < timePeriod; t++) {
@@ -292,13 +312,13 @@ class Calendar {
     }
     return slopes;
   }
-  List<double> fixCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength, List<double> hoursAvailable){
+  List<double> fixCalendar(double sessionLength, double timePeriod, maxVal, double motivation, totalLength, List<double> hoursAvailable){
     List<double> slopes = generateCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength);
     //goes thru every i value and checks if the amount of work hours scheduled for that day are greater than the hours the person is available
     for (int i = 0; i<slopes.length; i++){
       // if the amount of hours scheduled cannot be fit they will be split up evenely among the remaining days and subtracted from the current day (where the overflow exists)
       if (slopes[i] > hoursAvailable[i]){
-        for(int j = i+1; i<slopes.length; j++){
+        for(int j = i+1; j<slopes.length; j++){
           slopes[j] = slopes[j] + (slopes[i]/(slopes.length-i+1));
         }
         slopes[i] = hoursAvailable[i];
