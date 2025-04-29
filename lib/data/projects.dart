@@ -43,21 +43,23 @@ class Project extends Calendar {
   List<Project> getProjectList() {
     return projectList;
   }
-  List<double> generateProjectSchedule({
-  required double sessionLength,
-  required double maxVal,
-  required double motivation,
-}) {
+  List<double> generateProjectSchedule({required double sessionLength, required double maxVal, required double motivation,}) {
   // Calculate timePeriod as number of days until due date 
-  DateTime now = DateTime.now();
-  DateTime dueDate = DateTime.parse(projectDueDate); // has to be in 'yyyy-MM-dd' format otherwise it wont work
-  double timePeriod = dueDate.difference(now).inDays.toDouble();
+    DateTime now = DateTime.now();
+    DateTime dueDate = DateTime.parse(projectDueDate); // has to be in 'yyyy-MM-dd' format otherwise it wont work
+    double timePeriod = dueDate.difference(now).inDays.toDouble();
   
 
-  // Total work time in minutes (used to be in hours)
-  int totalLength = (double.parse(duration) * 60).round();
+    // Total work time in minutes (used to be in hours)
+    double totalLength = (double.parse(duration) * 60).round().toDouble();
 
-  return generateCalendar(sessionLength,  timePeriod, maxVal, motivation,totalLength);
+  
+
+    return generateCalendar(sessionLength,  timePeriod, maxVal, motivation,totalLength);
 }
+  int gettotalLength(){
+    int totalLength = (double.parse(duration) * 60).round();
+    return totalLength;
+  }
 
 }

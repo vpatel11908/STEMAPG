@@ -54,17 +54,16 @@ class _CalendarPageState extends State<CalendarPage> {
                 const SizedBox(height: 20), // Spacing between lists
                 Column(
                   children: <Widget>[
-                    for (int i = 0; i < Project.projectList.length; i++)
-                      for (int j = 0; j < int.parse(Project.projectList[i].getDuration()); j++)
-                        Card(
-                          child: ListTile(
-                            title: Text('Day ${j + 1} for Project ${i + 1}'),
-                            subtitle: Text('Details for calendar item ${j + 1}'),
-                            trailing: const Icon(Icons.info),
-                          ),
-                        ),
+                    for (int i = 0; i < finalHoursList.length; i++)
+                    Card(
+                      child: ListTile(
+                      title: Text('Day ${i + 1}'),
+                     subtitle: Text('Work hours: ${finalHoursList[i]}'),
+                     trailing: const Icon(Icons.info),
+                    ),
+                   ),
                   ],
-                ),
+                  ),
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
