@@ -19,16 +19,15 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     //widget that allows the user to see the list of tasks and when they should be completed by 
-  //in the future, this would be a calendar or allow the user to pair the app with their calendar
-  Widget build(BuildContext context) {
-    int i = 0;
+    //in the future, this would be a calendar or allow the user to pair the app with their calendar
+
     // Create the Calendar object here
     List<double>hoursAvailable=[];
     for(int i = 0; i<100; i++){
       hoursAvailable.add(100);
     }
-    Calendar projectCalendar = Calendar();
-    List<double> finalHoursList = projectCalendar.fixCalendar(1, 100, 100, 1, 100, hoursAvailable);
+    //Calendar projectCalendar = Calendar();
+    //List<double> finalHoursList = projectCalendar.fixCalendar(1, 100, 100, 1, 100, hoursAvailable);
 
     return Scaffold(
       appBar: AppBar(
@@ -76,9 +75,29 @@ class _CalendarPageState extends State<CalendarPage> {
                       });
                     },
                     */
+                    onTap: () {
+                        setState(() {
+                          if (i < Project.projectList.length) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProjectPage(project: Project.projectList[i]),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Invalid project index'),
+                              ),
+                            );
+                          }
+                    const SizedBox(height: 20);// Spacing between lists
+                    },
+                    
+                  ); 
+                  },
                   ),
                 ),
-                const SizedBox(height: 20), // Spacing between lists
                 Column(
                   children: <Widget>[
                     for (int i = 0; i < Project.projectList.length; i++)
@@ -106,33 +125,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   child: const Text('Add a new Project'),
                 ),
                   //displays the list of projects as cards that can be clicked on to view the project page for that project
-                for (int index = 0; index < Project.projectList.length; index++) ...[
-                  Card(
-                    child: ListTile(
-                      title: Text(Project.projectList[index].getName()),
-                      subtitle: Text(Project.projectList[index].getProjectDueDate()),
-                      trailing: Text(Project.projectList[index].getDuration()),
-                      onTap: () {
-                        setState(() {
-                          if (index < Project.projectList.length) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProjectPage(project: Project.projectList[index]),
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Invalid project index'),
-                              ),
-                            );
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                ],
+                /*
                 ElevatedButton( 
                   onPressed: () {
                     setState(() {
@@ -142,16 +135,16 @@ class _CalendarPageState extends State<CalendarPage> {
                           builder: (context) => const CalendarInfo(),
                         ),
                       );
-                    });
+                    }); 
                   },
                   child: const Text('Calendar Info'),
                 ),
+                */
               ],
             ),
             ]
           ],
         ),
-        
         ),
         ],
       ),
