@@ -15,7 +15,16 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
+    //widget that allows the user to see the list of tasks and when they should be completed by 
+    //in the future, this would be a calendar or allow the user to pair the app with their calendar
+
     // Create the Calendar object here
+    List<double>hoursAvailable=[];
+    for(int i = 0; i<100; i++){
+      hoursAvailable.add(100);
+    }
+    //Calendar projectCalendar = Calendar();
+    //List<double> finalHoursList = projectCalendar.fixCalendar(1, 100, 100, 1, 100, hoursAvailable);
     List<double> hoursAvailable = List.generate(100, (index) => 100.0);
     Calendar projectCalendar = Calendar();
     List<double> finalHoursList = projectCalendar.fixCalendar(1, 100, 100, 1, 100, hoursAvailable);
@@ -80,27 +89,47 @@ class _CalendarPageState extends State<CalendarPage> {
                             trailing: const Icon(Icons.info),
                           ),
                         ),
-                    ],
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CalendarInfo(), // Ensure CalendarInfo exists
-                          ),
-                        );
-                      });
-                    },
-                    child: const Text('Calendar Info'),
-                  ),
-                ],
+                  ],
+                ),
+                ElevatedButton( //button to add a new project
+                  onPressed: () {
+                    setState(() {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MakeNewTaskPage(),
+                        ),
+                      );
+                    });
+                  },
+                  child: const Text('Add a new Project'),
+                ),
+                  //displays the list of projects as cards that can be clicked on to view the project page for that project
+                /*
+                ElevatedButton( 
+                  onPressed: () {
+                    setState(() {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CalendarInfo(),
+                        ),
+                      );
+                    }); 
+                  },
+                  child: const Text('Calendar Info'),
+                ),
+                */
               ],
             ),
+            ]
+          ],
+        ),
+        ),
           ),
         ],
       ),
     );
   }
+}
 }
