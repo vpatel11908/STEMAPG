@@ -1,64 +1,56 @@
-import 'package:stemcalendar/main.dart';
+import 'calendar.dart';
+import '../screens/calendar_page.dart';
 //stores the data for the projects that the user creates
 class Project extends Calendar {
-  String projectName = '';
-  String projectDueDate = '';
-  String duration = '';
-  static List<Project> projectList = [];
+  static String projectName = '';
+  static DateTime projectDueDate = DateTime.parse('0000-00-00');
+  static String projectDuration = '';
   
-  Project (name, dueDate, projectDuration){
-    projectName = name;
-    projectDueDate = dueDate;
-    duration = projectDuration;
+  Project (name, dueDate, duration){
   }
 
   String getName() {
     return projectName;
   }
 
-  String getProjectDueDate() {
+  DateTime getProjectDueDate() {
     return projectDueDate;
   }
 
   String getDuration() {
-    return duration;
+    return projectDuration;
   }
 
-  void setName(String newName) {
+  static void setName(String newName) {
     projectName = newName;
   }
 
-  void setProjectDueDate(String newProjectDueDate) {
+  static void setProjectDueDate(DateTime newProjectDueDate) {
     projectDueDate = newProjectDueDate;
   }
 
-  void setDuration(String newDuration){
-    duration = newDuration;
+  static void setDuration(String newDuration){
+    projectDuration = newDuration;
   }
-
-  void addToProjectList(Project project) {
-    projectList.add(project);
-  }
-
-  List<Project> getProjectList() {
-    return projectList;
-  }
-  List<double> generateProjectSchedule({required double sessionLength, required double maxVal, required double motivation,}) {
+  List<double> generateProjectSchedule(double sessionLength, double maxVal, double motivation,) {
   // Calculate timePeriod as number of days until due date 
     DateTime now = DateTime.now();
-    DateTime dueDate = DateTime.parse(projectDueDate); // has to be in 'yyyy-MM-dd' format otherwise it wont work
-    double timePeriod = dueDate.difference(now).inDays.toDouble();
+    print('Due date: $projectDueDate');
+    double timePeriod = projectDueDate.difference(now).inDays.toDouble();
   
 
     // Total work time in minutes (used to be in hours)
-    double totalLength = (double.parse(duration) * 60).round().toDouble();
-
+    double totalLength = (double.parse(projectDuration)).round().toDouble();
+    List<double> finalhoursAvailable = [];
+    for(int i = 0; i<timePeriod; i++){
+      finalhoursAvailable.add(1000); // 100 hours available for each day (this is just a placeholder, you can change it to the actual hours available)
+    }
   
 
-    return generateCalendar(sessionLength,  timePeriod, maxVal, motivation,totalLength);
+    return fixCalendar(sessionLength,  timePeriod, maxVal, motivation,totalLength, finalhoursAvailable);
 }
   int gettotalLength(){
-    int totalLength = (double.parse(duration) * 60).round();
+    int totalLength = (double.parse(projectDuration) * 60).round();
     return totalLength;
   }
 

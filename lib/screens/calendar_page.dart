@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:stemcalendar/data/projects.dart';
 import 'package:stemcalendar/screens/make_new_task.dart';
 import 'package:stemcalendar/screens/project_page.dart';
+import '../data/calendar.dart';
+import '../data/projectList.dart';
+
 // Ensure CalendarInfo is imported if it exists in another file
 // import 'package:stemcalendar/screens/calendar_info.dart';
 
@@ -23,11 +26,16 @@ class _CalendarPageState extends State<CalendarPage> {
     for(int i = 0; i<100; i++){
       hoursAvailable.add(100);
     }
-    //Calendar projectCalendar = Calendar();
-    //List<double> finalHoursList = projectCalendar.fixCalendar(1, 100, 100, 1, 100, hoursAvailable);
-    List<double> hoursAvailable = List.generate(100, (index) => 100.0);
-    Calendar projectCalendar = Calendar();
-    List<double> finalHoursList = projectCalendar.fixCalendar(1, 100, 100, 1, 100, hoursAvailable);
+    List<Project> Pjl = ProjectList.getProjectList(); 
+    if (Pjl.isEmpty) {
+      return const Center(
+        child: Text('Please add a project first!'),
+      );
+    }
+    
+    Project projectCalendar =  Project("Name", "DueDate", "Duration");
+    List<double> finalHoursList = projectCalendar.generateProjectSchedule(1, 100, 1);
+
 
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +47,7 @@ class _CalendarPageState extends State<CalendarPage> {
           Center(
             child: Column(
               children: <Widget>[
-                if (Project.projectList.isEmpty) ...[
+                if (ProjectList.getProjectList().isEmpty) ...[
                   const Text('Please add a project first!'),
                   const SizedBox(height: 100),
                   ElevatedButton(
@@ -58,18 +66,18 @@ class _CalendarPageState extends State<CalendarPage> {
                 ] else ...[
                   Column(
                     children: <Widget>[
-                      for (int i = 0; i < Project.projectList.length; i++)
+                      for (int i = 0; i < Pjl.length; i++)
                         Card(
                           child: ListTile(
-                            title: Text(Project.projectList[i].getName()),
-                            subtitle: Text(Project.projectList[i].getProjectDueDate()),
+                            title: Text(Pjl[i].getName()),
+                            subtitle: Text(Pjl[i].getProjectDueDate().toString()),
                             trailing: const Icon(Icons.info),
                             onTap: () {
                               setState(() {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ProjectPage(project: Project.projectList[i]),
+                                    builder: (context) => ProjectPage(project: Pjl[i]),
                                   ),
                                 );
                               });
@@ -121,15 +129,12 @@ class _CalendarPageState extends State<CalendarPage> {
                 ),
                 */
               ],
+            
+            ],
             ),
-            ]
-          ],
-        ),
-        ),
           ),
         ],
       ),
     );
   }
-}
-}
+}  
