@@ -59,7 +59,7 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
               ),
         ),
          SizedBox(height: 20),
-         Text('Enter the estimated length of the project in hours:'),
+         Text('Enter the estimated length of the project in hours (only enter the number):'),
         TextField( //allows the user to enter the estimated length of the project
               controller: lengthController,
               decoration: const InputDecoration(
@@ -72,15 +72,11 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
         ElevatedButton(
           onPressed: () {
             var project = Project(nameController.text, dateController.text, lengthController.text); //stores the data in the project class
-            project.addToProjectList(project); //adds the project to the list so it can be displayed on the calendar page
+            project.addtoHashmap(nameController.text, project); //adds the project to the hashmap so it can be displayed on the calendar page
+            //need to change the calendar page to display the projects from the hashmap
             finishProjectCreation();
-            /*
-            Navigator.push( //goes back to the calendar page
-              context,
-              MaterialPageRoute(builder: (context) => const CalendarPage()),
-
-            );
-            */
+            // ignore: avoid_print
+            print('Project created: ${project.getFromHashmap(nameController.text)?.getName()}');
           }, 
           child: const Text('Create Task'),
         )

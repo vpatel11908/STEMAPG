@@ -31,6 +31,7 @@ class _ProjectPageState extends State<ProjectPage> {
             Column(
               children: <Widget>[
                  Text ('Project Name: ${widget.project.getName()}'),
+                 //do something else here later, probably allow for the user to edit the project
               ],
             ),
           ],

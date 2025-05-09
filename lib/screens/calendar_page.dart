@@ -1,20 +1,21 @@
+
 import 'package:flutter/material.dart';
 import 'package:stemcalendar/data/projects.dart';
 import 'package:stemcalendar/screens/make_new_task.dart';
-import 'package:stemcalendar/main.dart';
 import 'package:stemcalendar/screens/project_page.dart';
 
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
   
-
+  
   @override
   State<CalendarPage> createState() => _CalendarPageState();
 }
 
 class _CalendarPageState extends State<CalendarPage> {
   Widget? activeWidget;
+  String? get key => null;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class _CalendarPageState extends State<CalendarPage> {
     List<double>hoursAvailable=[];
     for(int i = 0; i<100; i++){
       hoursAvailable.add(100);
-    }
+    } 
     //Calendar projectCalendar = Calendar();
     //List<double> finalHoursList = projectCalendar.fixCalendar(1, 100, 100, 1, 100, hoursAvailable);
 
@@ -40,117 +41,60 @@ class _CalendarPageState extends State<CalendarPage> {
         child: 
         Column(
           children: <Widget>[
-            if (Project.projectList.isEmpty) ...[
+            if (projectsByName.isEmpty) ...[
                   const Text('Please add a project first!'),
-                  SizedBox(height: 100),
-                   ElevatedButton( //button to add a new project
-                  onPressed: () {
-                    setState(() {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MakeNewTaskPage(),
-                        ),
-                      );
-                    });
-                  },
-                  child: const Text('Add a new Project'),
-                ),
-            ]
-            else ...[
-            Column(
-              children: <Widget>[
-                for (int i = 0; i < Project.projectList.length; i++)
-                //display the list of projects as cards that can be clicked on to view the project page
-                Card(
-                  child: ListTile(
-                    title: Text(Project.projectList[i].getName()),
-                    subtitle: Text(Project.projectList[i].getProjectDueDate()),
-                    trailing: Text(Project.projectList[i].getDuration()),
-                    /*
-                    Add this when the project page is created
-                    onTap: () {
+                  SizedBox(height: 75),
+                  ElevatedButton( //button to add a new project
+                    onPressed: () {
                       setState(() {
-                        activeWidget = const ViewProjectPage();
-                      });
-                    },
-                    */
-                    onTap: () {
-                        setState(() {
-                          if (i < Project.projectList.length) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProjectPage(project: Project.projectList[i]),
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Invalid project index'),
-                              ),
-                            );
-                          }
-                    const SizedBox(height: 20);// Spacing between lists
-                    },
-                    
-                  ); 
-                  },
-                  ),
-                ),
-                Column(
-                  children: <Widget>[
-                    for (int i = 0; i < Project.projectList.length; i++)
-                      for (int j = 0; j < int.parse(Project.projectList[i].getDuration()); j++)
-                        Card(
-                          child: ListTile(
-                            title: Text('Day ${j + 1} for Project ${i + 1}'),
-                            subtitle: Text('Details for calendar item ${j + 1}'),
-                            trailing: const Icon(Icons.info),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MakeNewTaskPage(),
                           ),
-                        ),
-                  ],
-                ),
-                ElevatedButton( //button to add a new project
-                  onPressed: () {
-                    setState(() {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MakeNewTaskPage(),
-                        ),
-                      );
-                    });
-                  },
-                  child: const Text('Add a new Project'),
-                ),
-                  //displays the list of projects as cards that can be clicked on to view the project page for that project
-                /*
-                ElevatedButton( 
-                  onPressed: () {
-                    setState(() {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CalendarInfo(),
-                        ),
-                      );
-                    }); 
-                  },
-                  child: const Text('Calendar Info'),
-                ),
-                */
-              ],
-            ),
-            ]
+                        );
+                      });
+                    }, child: Text('Add New Project'),
+                  ),
+                ],
+            if  (projectsByName.isNotEmpty) ...[
+              Column(
+                children: <Widget>[
+                  for (var entry in projectsByName.entries)
+                    Card(
+                      child: ListTile(
+                        title: Text(entry.value.getName()), // Use the value's method to get the name
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProjectPage(project: entry.value), 
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ElevatedButton(
+                    onPressed: () {
+                        setState(() {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MakeNewTaskPage(),
+                            ),
+                          );
+                        });
+                      }, 
+                      child: const Text('Add another project'),
+                  ),
+                ],
+              ),
+            ],
           ],
         ),
-        ),
+          ),
         ],
       ),
-    );
-  }
-}
-
-//shared preferences to store the data
-//add text telling what the user should imput in the make new task page
+    ); 
+  }   
+}                       
