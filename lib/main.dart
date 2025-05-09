@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stemcalendar/screens/calendar_page.dart';
 import 'package:stemcalendar/screens/make_new_task.dart';
-import 'dart:math';
 import 'package:stemcalendar/screens/questions_screen.dart';
+import 'data/calendar.dart';
 
 void main() {
   runApp(
@@ -226,106 +226,3 @@ class CreateAccountPage extends StatelessWidget {
     );
   }
 }
-
-
-class BackendSCurve {
-  // Method to calculate the midpoint - the motivation determins this like the time period is just for the sake of keeping a standardized midpoint
-  static double calculateMidpoint(double motivation, double timePeriod) {
-    if (motivation < 3.5) {
-      return timePeriod / 4;
-    } else if (motivation >= 3.5 && motivation < 7) {
-      return timePeriod / 2;
-    } else {
-      return timePeriod * 3 / 4;
-    }
-  }
-
-  // Method to calculate the growth rate
-  static double calculateGrowthRate(sessionLength) {
-    if (sessionLength < 3.5) {
-      return 0.06;
-    } else if (sessionLength >= 3.5 && sessionLength < 7) {
-      return 0.12;
-    } else {
-      return 0.20;
-    }
-  }
-  // Calcuates S-Curve values
-  static List<double> sCurveValues(double maxVal, double midpoint, double growthRate, double endPeriod) {
-    List<double> values = [];
-    for (double t = 0; t <= endPeriod; t++) {
-      double sCurveValue = maxVal / (1 + exp(-growthRate*(t-midpoint)));
-      values.add(sCurveValue);
-    }
-    return values;
-  }
-
-  // Implements S-Curve calculatoin
-  static List<double> implement(double sessionLength, double motivation, double maxVal, double timePeriod) {
-    // Calculates growth rate
-    double growthRate = calculateGrowthRate(sessionLength);
-
-    // Calculates midpoint
-    double midpoint = calculateMidpoint(motivation, timePeriod);
-
-    // Generates S-curve values
-    return sCurveValues(maxVal, midpoint, growthRate, timePeriod);
-  }
-}
-
-class Calendar {
-  double getSessionLength(double sessionLength) {
-    return sessionLength;
-  }
-  double getMotivation(double motivation) {
-    return motivation;
-  }
-  double getMaxVal(double maxVal) {
-    return maxVal;
-  }
-  double getTimePeriod(double timePeriod) {
-    return timePeriod;
-  }
-  double getTotalLength(double totalLength) {
-    return totalLength;
-  }
-  // Generates the calendar based on the S-Curve values and the time period
-  List<double> generateCalendar(double sessionLength, double timePeriod, maxVal, double motivation, totalLength){
-    List<double> slopes = [];
-    // calculates the slope of the S-Curve at each time point by using the derivative (so like it takes the derivative of the s-curve function and then just plugs the numbers into the resulting equatoin)
-    for (int t = 1; t < timePeriod; t++) {
-      double exponent = exp(-BackendSCurve.calculateGrowthRate(sessionLength)*(t-BackendSCurve.calculateMidpoint(motivation, timePeriod)));
-      double slope = (maxVal * BackendSCurve.calculateGrowthRate(sessionLength) * exponent) / pow(1 + exponent, 2);
-      slopes.add(slope);
-    }
-    // adds all the slopes to a new list
-    double sum = 0;
-    for (int i = 0; i<slopes.length; i++){
-      sum += slopes[i];
-    }
-    // Normalizes the slopes to all represent the amount of minutes of work needed to be done at that point on the time interval (this will represent a day)
-    double sessionsAVGSlope = sum/totalLength;
-    for(int i = 0; i<slopes.length; i++){
-      slopes[i] = slopes[i]/sessionsAVGSlope;
-      slopes[i] *= 60;
-      slopes[i] = (slopes[i]).roundToDouble();
-    }
-    return slopes;
-  }
-  List<double> fixCalendar(double sessionLength, double timePeriod, maxVal, double motivation, totalLength, List<double> hoursAvailable){
-    List<double> slopes = generateCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength);
-    //goes thru every i value and checks if the amount of work hours scheduled for that day are greater than the hours the person is available
-    for (int i = 0; i<slopes.length; i++){
-      // if the amount of hours scheduled cannot be fit they will be split up evenely among the remaining days and subtracted from the current day (where the overflow exists)
-      if (slopes[i] > hoursAvailable[i]){
-        for(int j = i+1; j<slopes.length; j++){
-          slopes[j] = slopes[j] + (slopes[i]/(slopes.length-i+1));
-        }
-        slopes[i] = hoursAvailable[i];
-      }
-    }
-    return slopes;
-  }
-}
-
-//make the quiz page a part of settings tab, get rid of create account & login page

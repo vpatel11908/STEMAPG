@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:stemcalendar/data/projects.dart';
 import 'package:stemcalendar/screens/make_new_task.dart';
 import 'package:stemcalendar/screens/project_page.dart';
+import '../data/calendar.dart';
+import '../data/projectList.dart';
 
+// Ensure CalendarInfo is imported if it exists in another file
+// import 'package:stemcalendar/screens/calendar_info.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
-  
   
   @override
   State<CalendarPage> createState() => _CalendarPageState();
@@ -26,9 +29,17 @@ class _CalendarPageState extends State<CalendarPage> {
     List<double>hoursAvailable=[];
     for(int i = 0; i<100; i++){
       hoursAvailable.add(100);
-    } 
-    //Calendar projectCalendar = Calendar();
-    //List<double> finalHoursList = projectCalendar.fixCalendar(1, 100, 100, 1, 100, hoursAvailable);
+    }
+    List<Project> Pjl = ProjectList.getProjectList(); 
+    if (Pjl.isEmpty) {
+      return const Center(
+        child: Text('Please add a project first!'),
+      );
+    }
+    
+    Project projectCalendar =  Project("Name", "DueDate", "Duration");
+    List<double> finalHoursList = projectCalendar.generateProjectSchedule(1, 100, 1);
+
 
     return Scaffold(
       appBar: AppBar(
@@ -37,14 +48,13 @@ class _CalendarPageState extends State<CalendarPage> {
       body: ListView(
         physics: const BouncingScrollPhysics(),
         children: [
-      Center( 
-        child: 
-        Column(
-          children: <Widget>[
-            if (projectsByName.isEmpty) ...[
+          Center(
+            child: Column(
+              children: <Widget>[
+                if (ProjectList.getProjectList().isEmpty) ...[
                   const Text('Please add a project first!'),
-                  SizedBox(height: 75),
-                  ElevatedButton( //button to add a new project
+                  const SizedBox(height: 100),
+                  ElevatedButton(
                     onPressed: () {
                       setState(() {
                         Navigator.push(
@@ -54,47 +64,81 @@ class _CalendarPageState extends State<CalendarPage> {
                           ),
                         );
                       });
-                    }, child: Text('Add New Project'),
+                    },
+                    child: const Text('Add a new Project'),
                   ),
-                ],
-            if  (projectsByName.isNotEmpty) ...[
-              Column(
-                children: <Widget>[
-                  for (var entry in projectsByName.entries)
-                    Card(
-                      child: ListTile(
-                        title: Text(entry.value.getName()), // Use the value's method to get the name
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProjectPage(project: entry.value), 
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ElevatedButton(
-                    onPressed: () {
-                        setState(() {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MakeNewTaskPage(),
-                            ),
-                          );
-                        });
-                      }, 
-                      child: const Text('Add another project'),
+                ] else ...[
+                  Column(
+                    children: <Widget>[
+                      for (int i = 0; i < Pjl.length; i++)
+                        Card(
+                          child: ListTile(
+                            title: Text(Pjl[i].getName()),
+                            subtitle: Text(Pjl[i].getProjectDueDate().toString()),
+                            trailing: const Icon(Icons.info),
+                            onTap: () {
+                              setState(() {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProjectPage(project: Pjl[i]),
+                                  ),
+                                );
+                              });
+                            },
+                          ),
+                        ),
+                    ],
                   ),
-                ],
-              ),
+                  const SizedBox(height: 20), // Spacing between lists
+                  Column(
+                    children: <Widget>[
+                      for (int i = 0; i < finalHoursList.length; i++)
+                        Card(
+                          child: ListTile(
+                            title: Text('Day ${i + 1}'),
+                            subtitle: Text('Work hours: ${finalHoursList[i]}'),
+                            trailing: const Icon(Icons.info),
+                          ),
+                        ),
+                  ],
+                ),
+                ElevatedButton( //button to add a new project
+                  onPressed: () {
+                    setState(() {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MakeNewTaskPage(),
+                        ),
+                      );
+                    });
+                  },
+                  child: const Text('Add a new Project'),
+                ),
+                  //displays the list of projects as cards that can be clicked on to view the project page for that project
+                /*
+                ElevatedButton( 
+                  onPressed: () {
+                    setState(() {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CalendarInfo(),
+                        ),
+                      );
+                    }); 
+                  },
+                  child: const Text('Calendar Info'),
+                ),
+                */
+              ],
+            
             ],
-          ],
-        ),
+            ),
           ),
         ],
       ),
-    ); 
-  }   
-}                       
+    );
+  }
+}  

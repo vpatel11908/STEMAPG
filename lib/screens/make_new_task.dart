@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:stemcalendar/data/projects.dart';
 import 'package:stemcalendar/main.dart';
 import 'package:stemcalendar/screens/calendar_page.dart';
+import '../data/projectList.dart';
+import '../data/projects.dart';
 
 class MakeNewTaskPage extends StatefulWidget {
   const MakeNewTaskPage({super.key});
@@ -71,12 +73,14 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
         SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {
+            Project.setProjectDueDate(DateTime.parse(dateController.text)); //gets the due date from the text field
+            Project.setName(nameController.text); //gets the name from the text field
+            Project.setDuration(lengthController.text); //gets the length from the text field
             var project = Project(nameController.text, dateController.text, lengthController.text); //stores the data in the project class
-            project.addtoHashmap(nameController.text, project); //adds the project to the hashmap so it can be displayed on the calendar page
-            //need to change the calendar page to display the projects from the hashmap
+            ProjectList.addToProjectList(project); //adds the project to the list so it can be displayed on the calendar page
             finishProjectCreation();
             // ignore: avoid_print
-            print('Project created: ${project.getFromHashmap(nameController.text)?.getName()}');
+           
           }, 
           child: const Text('Create Task'),
         )
