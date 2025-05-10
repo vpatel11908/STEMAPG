@@ -89,15 +89,18 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
                   ElevatedButton( //button to navigate to the calendar page
                     onPressed: () {
                        if(Project.projectList.isEmpty) {
-                        const snackdemo = SnackBar(
-                        content: Text('Please create a project first!'),
+                        const emptyList = SnackBar(
+                        content:
+                        Center(
+                           child: Text('Please create a project first!'),
+                         ),
                         duration: Duration(seconds: 2),
                         backgroundColor: Colors.green,
                         elevation: 10,
                         behavior: SnackBarBehavior.floating,
                         margin: EdgeInsets.all(10),
                       );
-                      ScaffoldMessenger.of(context).showSnackBar(snackdemo);
+                      ScaffoldMessenger.of(context).showSnackBar(emptyList);
                        }
                       else{
                       Navigator.push(

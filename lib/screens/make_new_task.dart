@@ -72,6 +72,40 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
         SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {
+            if (nameController.text.isEmpty || dateController.text.isEmpty || lengthController.text.isEmpty) {
+              //if any of the text fields are empty, tell the user to fill them in
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: 
+                  Center(
+                    child:Text('Please fill in all fields')
+                    ),
+                  duration: Duration(seconds: 2),
+                  backgroundColor: Colors.green,
+                  elevation: 10,
+                  behavior: SnackBarBehavior.floating,
+                  margin: EdgeInsets.all(10),
+                ),
+              );
+              return;
+            } 
+            if (!RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(dateController.text)) {
+              //if the date is not in the yyyy-mm-dd format, tell the user to fix it
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: 
+                  Center(
+                    child:Text('Please enter the date in the yyyy-MM-dd format')
+                    ),
+                  duration: Duration(seconds: 2),
+                  backgroundColor: Colors.green,
+                  elevation: 10,
+                  behavior: SnackBarBehavior.floating,
+                  margin: EdgeInsets.all(10),
+                ),
+              );
+              return;
+            }
             Project.setProjectDueDate(DateTime.parse(dateController.text)); //gets the due date from the text field
             Project.setName(nameController.text); //gets the name from the text field
             Project.setDuration(lengthController.text); //gets the length from the text field
