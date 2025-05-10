@@ -1,5 +1,4 @@
 import 'calendar.dart';
-import '../screens/calendar_page.dart';
 //stores the data for the projects that the user creates
 class Project extends Calendar {
   static String projectName = '';
@@ -8,6 +7,10 @@ class Project extends Calendar {
   static List<Project> projectList = [];
   
   Project (name, dueDate, duration){
+    projectName = name;
+    projectDueDate = DateTime.parse(dueDate);
+    projectDuration = duration;
+    projectList.add(this);
   }
 
   String getName() {

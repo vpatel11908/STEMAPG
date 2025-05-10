@@ -3,7 +3,7 @@ import 'package:stemcalendar/screens/calendar_page.dart';
 import 'package:stemcalendar/screens/make_new_task.dart';
 import 'package:stemcalendar/screens/questions_screen.dart';
 import 'data/calendar.dart';
-
+import 'package:stemcalendar/data/projects.dart';
 void main() {
   runApp(
     const MaterialApp(
@@ -88,10 +88,23 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
                   SizedBox(width: 40), 
                   ElevatedButton( //button to navigate to the calendar page
                     onPressed: () {
-                       Navigator.push(
-                        context, 
-                        MaterialPageRoute(builder: (context) => CalendarPage()),
-                    );
+                       if(Project.projectList.isEmpty) {
+                        const snackdemo = SnackBar(
+                        content: Text('Please create a project first!'),
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Colors.green,
+                        elevation: 10,
+                        behavior: SnackBarBehavior.floating,
+                        margin: EdgeInsets.all(10),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackdemo);
+                       }
+                      else{
+                      Navigator.push(
+                          context, 
+                          MaterialPageRoute(builder: (context) => const CalendarPage()),
+                        );
+                      }
                     },
                     child: Text('Calendar'),
                   ),
@@ -106,9 +119,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
       }
 }
 
-//Login page - this page is used to log in to an existing 
-//account, then navigate to the main app (might get rid of 
-//this and store the data locally)
+//Login page - this page would be used to log in to an existing account, then navigate to the main app (got rid of this and store the data locally)
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -165,8 +176,6 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         var username = textController.text;
                         var password = secondController.text;
-                        print('Username: $username');
-                        print('Password: $password');
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => const MainApp()),//change to some way to save the login info and move to the create task page

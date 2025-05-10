@@ -1,4 +1,4 @@
-//implement subtask components after the creation of the MVP 
+//implement subtask components after the MVP 
 
 //import 'package:stemcalendar/data/projects.dart';
 

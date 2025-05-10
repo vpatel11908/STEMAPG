@@ -18,7 +18,7 @@ class _ProjectPageState extends State<ProjectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.project.getName()),
+        title: Text(widget.project.getDuration()),
       ),
       body:
       ListView(
@@ -30,8 +30,8 @@ class _ProjectPageState extends State<ProjectPage> {
           children: <Widget>[
             Column(
               children: <Widget>[
-                 Text ('Project Name: ${widget.project.getName()}'),
-                 //do something else here later, probably allow for the user to edit the project
+                 Text ('Project Duration: ${widget.project.getName()}'),
+                 //do something else here after the MVP, probably allow for the user to edit the project
               ],
             ),
           ],

@@ -3,7 +3,6 @@ import 'package:stemcalendar/data/projects.dart';
 import 'package:stemcalendar/main.dart';
 import 'package:stemcalendar/screens/calendar_page.dart';
 import '../data/projectList.dart';
-import '../data/projects.dart';
 
 class MakeNewTaskPage extends StatefulWidget {
   const MakeNewTaskPage({super.key});
@@ -76,11 +75,9 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
             Project.setProjectDueDate(DateTime.parse(dateController.text)); //gets the due date from the text field
             Project.setName(nameController.text); //gets the name from the text field
             Project.setDuration(lengthController.text); //gets the length from the text field
-            var project = Project(nameController.text, dateController.text, lengthController.text); //stores the data in the project class
+            var project = Project(nameController.text, dateController.text, lengthController.text); 
             ProjectList.addToProjectList(project); //adds the project to the list so it can be displayed on the calendar page
             finishProjectCreation();
-            // ignore: avoid_print
-           
           }, 
           child: const Text('Create Task'),
         )
@@ -90,8 +87,3 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
     );
   }
 }
-
-// how to store data:
-//hash maps? - linked hash map to store data in the order it was added
-//shared preferences - stores data in key value pairs
-// SQ Lite - room api? - gives you methods to use?
