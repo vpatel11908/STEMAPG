@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:stemcalendar/data/projects.dart';
+import 'package:stemcalendar/data/shared_preferences.dart';
 import 'package:stemcalendar/screens/make_new_task.dart';
 import 'package:stemcalendar/screens/project_page.dart';
 import '../data/projectList.dart';
@@ -13,9 +14,32 @@ class CalendarPage extends StatefulWidget {
   State<CalendarPage> createState() => _CalendarPageState();
 }
 
-class _CalendarPageState extends State<CalendarPage> {
+class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver {
+  late ProjectRegistry registry;
   Widget? activeWidget;
   String? get key => null;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _initProjectRegistry();
+  }
+
+   Future<void> _initProjectRegistry() async {
+    registry = await ProjectRegistry.create();
+    await registry.loadProjectsFromSharedPreferences();
+    setState(() {});
+  } 
+
+  //saves the app when it is closed or in the
+  // backgronund
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.detached) {
+      registry.saveProjectsToSharedPreferences(); 
+    }
+  }
 
   @override
   //widget that allows the user to see the list of tasks and when they should be completed by 

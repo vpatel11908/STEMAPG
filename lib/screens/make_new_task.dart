@@ -76,10 +76,7 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
               //if any of the text fields are empty, tell the user to fill them in
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: 
-                  Center(
-                    child:Text('Please fill in all fields')
-                    ),
+                  content: Text('Please fill in all fields'),
                   duration: Duration(seconds: 2),
                   backgroundColor: Colors.green,
                   elevation: 10,
@@ -89,35 +86,39 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
               );
               return;
             } 
-            if (!RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(dateController.text)) {
-              //if the date is not in the yyyy-mm-dd format, tell the user to fix it
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: 
-                  Center(
-                    child:Text('Please enter the date in the yyyy-MM-dd format')
-                    ),
-                  duration: Duration(seconds: 2),
-                  backgroundColor: Colors.green,
-                  elevation: 10,
-                  behavior: SnackBarBehavior.floating,
-                  margin: EdgeInsets.all(10),
-                ),
-              );
-              return;
+            else{
+              //if the text fields are not empty, check if the date is in the correct format
+              try{
+                DateTime.parse(dateController.text);
+
+              } 
+              catch (e) {
+                //if the date is not in the yyyy-mm-dd format, tell the user to fix it
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Please enter the date in the yyyy-MM-dd format'),
+                    duration: Duration(seconds: 2),
+                    backgroundColor: Colors.green,
+                    elevation: 10,
+                    behavior: SnackBarBehavior.floating,
+                    margin: EdgeInsets.all(10),
+                  ),
+                );
+                return;
+              }
+              Project.setProjectDueDate(DateTime.parse(dateController.text)); //gets the due date from the text field
+              Project.setName(nameController.text); //gets the name from the text field
+              Project.setDuration(lengthController.text); //gets the length from the text field
+              var project = Project(nameController.text, dateController.text, lengthController.text); 
+              ProjectList.addToProjectList(project); //adds the project to the list so it can be displayed on the calendar page
+              finishProjectCreation();
             }
-            Project.setProjectDueDate(DateTime.parse(dateController.text)); //gets the due date from the text field
-            Project.setName(nameController.text); //gets the name from the text field
-            Project.setDuration(lengthController.text); //gets the length from the text field
-            var project = Project(nameController.text, dateController.text, lengthController.text); 
-            ProjectList.addToProjectList(project); //adds the project to the list so it can be displayed on the calendar page
-            finishProjectCreation();
-          }, 
-          child: const Text('Create Task'),
-        )
-          ],
+          },
+        child: const Text('Create Task'),
         ),
+          ],
       ),
-    );
+    ),
+  );
   }
 }

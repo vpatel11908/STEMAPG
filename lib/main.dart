@@ -90,10 +90,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
                     onPressed: () {
                        if(Project.projectList.isEmpty) {
                         const emptyList = SnackBar(
-                        content:
-                        Center(
-                           child: Text('Please create a project first!'),
-                         ),
+                        content:Text('Please create a project first!'),
                         duration: Duration(seconds: 2),
                         backgroundColor: Colors.green,
                         elevation: 10,
