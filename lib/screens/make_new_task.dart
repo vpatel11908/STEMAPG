@@ -3,7 +3,6 @@ import 'package:stemcalendar/data/projects.dart';
 import 'package:stemcalendar/main.dart';
 import 'package:stemcalendar/screens/calendar_page.dart';
 import '../data/projectList.dart';
-import '../data/projects.dart';
 
 class MakeNewTaskPage extends StatefulWidget {
   const MakeNewTaskPage({super.key});
@@ -61,7 +60,7 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
               ),
         ),
          SizedBox(height: 20),
-         Text('Enter the estimated length of the project in hours:'),
+         Text('Enter the estimated length of the project in hours (only enter the number):'),
         TextField( //allows the user to enter the estimated length of the project
               controller: lengthController,
               decoration: const InputDecoration(
@@ -73,30 +72,53 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
         SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {
-            Project.setProjectDueDate(DateTime.parse(dateController.text)); //gets the due date from the text field
-            Project.setName(nameController.text); //gets the name from the text field
-            Project.setDuration(lengthController.text); //gets the length from the text field
-            var project = Project(nameController.text, dateController.text, lengthController.text); //stores the data in the project class
-            ProjectList.addToProjectList(project); //adds the project to the list so it can be displayed on the calendar page
-            finishProjectCreation();
-            /*
-            Navigator.push( //goes back to the calendar page
-              context,
-              MaterialPageRoute(builder: (context) => const CalendarPage()),
+            if (nameController.text.isEmpty || dateController.text.isEmpty || lengthController.text.isEmpty) {
+              //if any of the text fields are empty, tell the user to fill them in
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Please fill in all fields'),
+                  duration: Duration(seconds: 2),
+                  backgroundColor: Colors.green,
+                  elevation: 10,
+                  behavior: SnackBarBehavior.floating,
+                  margin: EdgeInsets.all(10),
+                ),
+              );
+              return;
+            } 
+            else{
+              //if the text fields are not empty, check if the date is in the correct format
+              try{
+                DateTime.parse(dateController.text);
 
-            );
-            */
-          }, 
-          child: const Text('Create Task'),
-        )
-          ],
+              } 
+              catch (e) {
+                //if the date is not in the yyyy-mm-dd format, tell the user to fix it
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Please enter the date in the yyyy-MM-dd format'),
+                    duration: Duration(seconds: 2),
+                    backgroundColor: Colors.green,
+                    elevation: 10,
+                    behavior: SnackBarBehavior.floating,
+                    margin: EdgeInsets.all(10),
+                  ),
+                );
+                return;
+              }
+              Project.setProjectDueDate(DateTime.parse(dateController.text)); //gets the due date from the text field
+              Project.setName(nameController.text); //gets the name from the text field
+              Project.setDuration(lengthController.text); //gets the length from the text field
+              var project = Project(nameController.text, dateController.text, lengthController.text); 
+              ProjectList.addToProjectList(project); //adds the project to the list so it can be displayed on the calendar page
+              finishProjectCreation();
+            }
+          },
+        child: const Text('Create Task'),
         ),
+          ],
       ),
-    );
+    ),
+  );
   }
 }
-
-// how to store data:
-//hash maps? - linked hash map to store data in the order it was added
-//shared preferences - stores data in key value pairs
-// SQ Lite - room api? - gives you methods to use?

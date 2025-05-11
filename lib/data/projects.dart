@@ -1,12 +1,16 @@
 import 'calendar.dart';
-import '../screens/calendar_page.dart';
 //stores the data for the projects that the user creates
 class Project extends Calendar {
   static String projectName = '';
   static DateTime projectDueDate = DateTime.parse('0000-00-00');
   static String projectDuration = '';
+  static List<Project> projectList = [];
   
   Project (name, dueDate, duration){
+    projectName = name;
+    projectDueDate = DateTime.parse(dueDate);
+    projectDuration = duration;
+    projectList.add(this);
   }
 
   String getName() {
@@ -53,5 +57,9 @@ class Project extends Calendar {
     int totalLength = (double.parse(projectDuration) * 60).round();
     return totalLength;
   }
+   static fromJson(projectMap) {}
+
+  toJson() {}
 
 }
+

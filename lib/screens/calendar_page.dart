@@ -1,24 +1,49 @@
+
 import 'package:flutter/material.dart';
 import 'package:stemcalendar/data/projects.dart';
+import 'package:stemcalendar/data/shared_preferences.dart';
 import 'package:stemcalendar/screens/make_new_task.dart';
 import 'package:stemcalendar/screens/project_page.dart';
-import '../data/calendar.dart';
 import '../data/projectList.dart';
 
-// Ensure CalendarInfo is imported if it exists in another file
-// import 'package:stemcalendar/screens/calendar_info.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
-
+  
   @override
   State<CalendarPage> createState() => _CalendarPageState();
 }
 
-class _CalendarPageState extends State<CalendarPage> {
+class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver {
+  late ProjectRegistry registry;
+  Widget? activeWidget;
+  String? get key => null;
+
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _initProjectRegistry();
+  }
+
+   Future<void> _initProjectRegistry() async {
+    registry = await ProjectRegistry.create();
+    await registry.loadProjectsFromSharedPreferences();
+    setState(() {});
+  } 
+
+  //saves the app when it is closed or in the
+  // backgronund
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.detached) {
+      registry.saveProjectsToSharedPreferences(); 
+    }
+  }
+
+  @override
+  //widget that allows the user to see the list of tasks and when they should be completed by 
   Widget build(BuildContext context) {
-    //widget that allows the user to see the list of tasks and when they should be completed by 
     //in the future, this would be a calendar or allow the user to pair the app with their calendar
 
     // Create the Calendar object here
@@ -47,23 +72,6 @@ class _CalendarPageState extends State<CalendarPage> {
           Center(
             child: Column(
               children: <Widget>[
-                if (ProjectList.getProjectList().isEmpty) ...[
-                  const Text('Please add a project first!'),
-                  const SizedBox(height: 100),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MakeNewTaskPage(),
-                          ),
-                        );
-                      });
-                    },
-                    child: const Text('Add a new Project'),
-                  ),
-                ] else ...[
                   Column(
                     children: <Widget>[
                       for (int i = 0; i < Pjl.length; i++)
@@ -84,7 +92,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             },
                           ),
                         ),
-                    ],
+                    ]
                   ),
                   const SizedBox(height: 20), // Spacing between lists
                   Column(
@@ -112,25 +120,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   },
                   child: const Text('Add a new Project'),
                 ),
-                  //displays the list of projects as cards that can be clicked on to view the project page for that project
-                /*
-                ElevatedButton( 
-                  onPressed: () {
-                    setState(() {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CalendarInfo(),
-                        ),
-                      );
-                    }); 
-                  },
-                  child: const Text('Calendar Info'),
-                ),
-                */
               ],
-            
-            ],
             ),
           ),
         ],
