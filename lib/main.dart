@@ -6,9 +6,10 @@ import 'data/calendar.dart';
 
 void main() {
   runApp(
-    const MaterialApp(
+    MaterialApp(
       title: 'Navigation Basics', 
-      home: MainApp(),
+      home: const MainApp(),
+      theme: ThemeData(scaffoldBackgroundColor: Color.fromARGB(255, 226, 227, 197)),
     ),
   );
   double motivation = 1;
@@ -45,7 +46,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
      Widget build(BuildContext context) { //the home page of the app
     return Scaffold(
       appBar: AppBar(
-        
+        backgroundColor: Color.fromARGB(255, 226, 227, 197),
       ),
       body:
       ListView(
