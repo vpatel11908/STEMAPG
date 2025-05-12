@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stemcalendar/data/projects.dart';
+import 'package:stemcalendar/data/shared_preferences.dart';
 import 'package:stemcalendar/main.dart';
 import 'package:stemcalendar/screens/calendar_page.dart';
 import '../data/projectList.dart';
@@ -112,15 +113,17 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
                     ),
                   );
                   return;
-                  }
+                }
                 else{
                   var project = Project(nameController.text, dateController.text, lengthController.text); 
-                  ProjectList.addToProjectList(project); //adds the project to the list so it can be displayed on the calendar page
+                  project.setDuration(double.parse(lengthController.text) as String); //sets the duration of the project
+                  ProjectList.addToProjectList(project);
+                  ProjectRegistry().saveProjectsToSharedPreferences();  //adds the project to the list so it can be displayed on the calendar page
                   finishProjectCreation();
-                }
-              }  
-                else {
-                //if the date is not in the yyyy-mm-dd format, tell the user to fix it
+                }  
+              }
+              else {
+              //if the date is not in the yyyy-mm-dd format, tell the user to fix it
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Please enter the date in the yyyy-MM-dd format'),

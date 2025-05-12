@@ -12,11 +12,11 @@ class Project extends Calendar {
   final projectRegistry = ProjectRegistry(); // An instance of ProjectRegistry
 
   Project(String name, String dueDate, String duration) {
-    projectName = name;
-    projectDueDate = DateTime.parse(dueDate);
-    projectDuration = double.parse(duration);
-    projectList.add(this);
-  }
+  projectName = name;
+  projectDueDate = DateTime.parse(dueDate);
+  projectDuration = double.parse(duration);
+  projectList.add(this);
+}
    // Convert a Project object to JSON
   Map<String, dynamic> toJson() {
     return {
@@ -56,7 +56,7 @@ class Project extends Calendar {
     projectDueDate = newProjectDueDate;
   }
 
-  void setDuration(String newDuration){
+  void setDuration(newDuration){
     projectDuration = double.parse(newDuration);
   }
   List<double> generateProjectSchedule(double sessionLength, double maxVal, double motivation,) {
