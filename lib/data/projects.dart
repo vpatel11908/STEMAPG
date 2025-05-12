@@ -3,13 +3,11 @@ import 'calendar.dart';
 class Project extends Calendar {
   static String projectName = '';
   static DateTime projectDueDate = DateTime.parse('0000-00-00');
-  static String projectDuration = '';
+  static double projectDuration = 0;
   static List<Project> projectList = [];
   
   Project (name, dueDate, duration){
     projectName = name;
-    projectDueDate = DateTime.parse(dueDate);
-    projectDuration = duration;
     projectList.add(this);
   }
 
@@ -21,7 +19,7 @@ class Project extends Calendar {
     return projectDueDate;
   }
 
-  String getDuration() {
+  double getDuration() {
     return projectDuration;
   }
 
@@ -34,7 +32,7 @@ class Project extends Calendar {
   }
 
   static void setDuration(String newDuration){
-    projectDuration = newDuration;
+    projectDuration = double.parse(newDuration);
   }
   List<double> generateProjectSchedule(double sessionLength, double maxVal, double motivation,) {
   // Calculate timePeriod as number of days until due date 
@@ -44,7 +42,7 @@ class Project extends Calendar {
   
 
     // Total work time in minutes (used to be in hours)
-    double totalLength = (double.parse(projectDuration)).round().toDouble();
+    double totalLength = (projectDuration).round().toDouble();
     List<double> finalhoursAvailable = [];
     for(int i = 0; i<timePeriod; i++){
       finalhoursAvailable.add(1000); // 100 hours available for each day (this is just a placeholder, you can change it to the actual hours available)
@@ -54,7 +52,7 @@ class Project extends Calendar {
     return fixCalendar(sessionLength,  timePeriod, maxVal, motivation,totalLength, finalhoursAvailable);
 }
   int gettotalLength(){
-    int totalLength = (double.parse(projectDuration) * 60).round();
+    int totalLength = ((projectDuration) * 60).round();
     return totalLength;
   }
    static fromJson(projectMap) {}
