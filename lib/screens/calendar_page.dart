@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:stemcalendar/data/projects.dart';
 import 'package:stemcalendar/data/shared_preferences.dart';
@@ -6,7 +5,7 @@ import 'package:stemcalendar/screens/make_new_task.dart';
 import 'package:stemcalendar/screens/project_page.dart';
 import '../data/projectList.dart';
 
-
+//page to show the list of projects and their due dates, as well as the chunks of time that the user must work on the project per day
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
   
@@ -32,8 +31,7 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
     setState(() {});
   } 
 
-  //saves the app when it is closed or in the
-  // backgronund
+  //saves the app when it is closed or in the backgronund
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused || state == AppLifecycleState.detached) {
@@ -54,17 +52,18 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
     List<Project> Pjl = ProjectList.getProjectList(); 
     if (Pjl.isEmpty) {
       return const Center(
-        child: Text('Please add a project first!'),
+        child: Text('Please add a project first!'), //make a snackbar
       );
     }
     
-    Project projectCalendar =  Project("Name", "DueDate", "Duration");
+    Project projectCalendar =  Project("Name", "2025-05-23", "Duration");
     List<double> finalHoursList = projectCalendar.generateProjectSchedule(1, 100, 1);
 
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Calendar Page'),
+        backgroundColor: Color.fromARGB(255, 226, 227, 197)
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
@@ -94,7 +93,7 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
                         ),
                     ]
                   ),
-                  const SizedBox(height: 20), // Spacing between lists
+                  const SizedBox(height: 20), // Spacing between cards
                   Column(
                     children: <Widget>[
                       for (int i = 0; i < finalHoursList.length; i++)

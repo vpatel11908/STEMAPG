@@ -1,60 +1,38 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stemcalendar/data/projects.dart';
+import 'projects.dart';
+import 'projectList.dart';
 
-//stores the data in shared preferences so that the data isn't lost when the app is closed
+
 class ProjectRegistry {
-  late final SharedPreferencesWithCache prefsWithCache;
+  static List<Project> projectList = [];
 
-  ProjectRegistry._();
+  ProjectRegistry();
 
-  static Future<ProjectRegistry> create() async {
-    final registry = ProjectRegistry._();
-    registry.prefsWithCache = await SharedPreferencesWithCache.create(
-      cacheOptions: const SharedPreferencesWithCacheOptions(allowList: null),
-    );
-    return registry;
+  get prefsWithCache => null; // Default constructor
+
+  // Load projects from SharedPreferences
+  Future<void> loadProjectsFromSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? projectsJson = prefs.getString('projects');
+
+    if (projectsJson != null) {
+      final List<dynamic> decodedProjects = jsonDecode(projectsJson);
+      ProjectList.projects = decodedProjects.map((json) => Project.fromJson(json)).toList().cast<Project>();
+    } else {
+      ProjectList.projects = [];
+    }
   }
 
   // Save projects to SharedPreferences
   Future<void> saveProjectsToSharedPreferences() async {
-    final projectListJson = _projectList.map((p) => p.toJson()).toList();
-    await prefsWithCache.setString('projects', jsonEncode(projectListJson));
+    final prefs = await SharedPreferences.getInstance();
+    final String projectsJson = jsonEncode(ProjectList.projects.map((project) => project.toJson()).toList());
+    await prefs.setString('projects', projectsJson);
   }
 
-  // Load the project list from SharedPreferences
-  Future<void> loadProjectsFromSharedPreferences() async {
-    final projectString = prefsWithCache.getString('projects');
-    if (projectString != null) {
-      final List<dynamic> projectJsonList = jsonDecode(projectString);
-      _projectList =
-          projectJsonList
-              .map((json) => Project.fromJson(json))
-              .toList()
-              .cast<Project>();
-    }
-  }
-
-  //store the projects as a list so they can be iterated through on the calendar page
-  static List<Project> _projectList = [];
-
-  static void addProject(Project project) {
-    _projectList.add(project);
-  }
-
-  static Project? getProjectByName(String name) {
-  try {
-    return _projectList.firstWhere((p) => p.getName() == name);
-  } catch (_) {
-    return null;
+  static create() {
+    return ProjectRegistry();
   }
 }
 
-  static List<Project> getProjectList() {
-    return List.unmodifiable(_projectList);
-  }
-
-  static void clearProjects() {
-    _projectList.clear();
-  }
-}

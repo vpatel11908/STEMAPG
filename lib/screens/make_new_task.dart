@@ -19,9 +19,10 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
   //widget that allows the user to create a new task and stores the data in the Projects class
   Widget build(BuildContext context) {
     //used to get the data from the text fields where the user enters the project data
-    TextEditingController nameController = TextEditingController();
-    TextEditingController dateController = TextEditingController();
-    TextEditingController lengthController = TextEditingController();
+    late TextEditingController nameController = TextEditingController();
+    late TextEditingController dateController = TextEditingController();
+    late TextEditingController lengthController = TextEditingController();
+
 
     void finishProjectCreation() {
     Navigator.pushAndRemoveUntil<MainApp>(
@@ -31,14 +32,24 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
     );
     }
 
+    @override
+    void dispose() {
+      nameController.dispose();
+      dateController.dispose();
+      lengthController.dispose();
+      super.dispose();
+  }
+
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Make New Project'),
-
+        title: const Text('Add a New Project'),
+        backgroundColor: Color.fromARGB(255, 226, 227, 197),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text('Enter the name of this project:'),
             TextField( //allows the user to enter the name of the project
@@ -60,7 +71,7 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
               ),
         ),
          SizedBox(height: 20),
-         Text('Enter the estimated length of the project in hours (only enter the number):'),
+         Text('Enter the estimated length of the project in hours :'),
         TextField( //allows the user to enter the estimated length of the project
               controller: lengthController,
               decoration: const InputDecoration(
@@ -87,12 +98,28 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
               return;
             } 
             else{
-              //if the text fields are not empty, check if the date is in the correct format
-              try{
-                DateTime.parse(dateController.text);
-
-              } 
-              catch (e) {
+              //if the text fields contain text, check if the date is in the correct format
+              if (RegExp(r'^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$').hasMatch(dateController.text)) {
+                if (double.tryParse(lengthController.text) == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please enter a numeric duration'),
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Colors.green,
+                      elevation: 10,
+                      behavior: SnackBarBehavior.floating,
+                      margin: EdgeInsets.all(10),
+                    ),
+                  );
+                  return;
+                  }
+                else{
+                  var project = Project(nameController.text, dateController.text, lengthController.text); 
+                  ProjectList.addToProjectList(project); //adds the project to the list so it can be displayed on the calendar page
+                  finishProjectCreation();
+                }
+              }  
+                else {
                 //if the date is not in the yyyy-mm-dd format, tell the user to fix it
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -106,12 +133,6 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
                 );
                 return;
               }
-              Project.setProjectDueDate(DateTime.parse(dateController.text)); //gets the due date from the text field
-              Project.setName(nameController.text); //gets the name from the text field
-              Project.setDuration(lengthController.text); //gets the length from the text field
-              var project = Project(nameController.text, dateController.text, lengthController.text); 
-              ProjectList.addToProjectList(project); //adds the project to the list so it can be displayed on the calendar page
-              finishProjectCreation();
             }
           },
         child: const Text('Create Task'),

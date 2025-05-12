@@ -1,17 +1,40 @@
 import 'calendar.dart';
+import 'dart:convert';
+import 'projectList.dart';
+import 'shared_preferences.dart';
+
 //stores the data for the projects that the user creates
 class Project extends Calendar {
-  static String projectName = '';
-  static DateTime projectDueDate = DateTime.parse('0000-00-00');
-  static String projectDuration = '';
-  static List<Project> projectList = [];
-  
-  Project (name, dueDate, duration){
+  late final String projectName;
+  late final DateTime projectDueDate;
+  late final double projectDuration;
+  List<Project> projectList = [];
+  final projectRegistry = ProjectRegistry(); // An instance of ProjectRegistry
+
+  Project(String name, String dueDate, String duration) {
     projectName = name;
     projectDueDate = DateTime.parse(dueDate);
-    projectDuration = duration;
+    projectDuration = double.parse(duration);
     projectList.add(this);
   }
+   // Convert a Project object to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'name': projectName,
+      'dueDate': projectDueDate.toIso8601String(),
+      'duration': projectDuration,
+    };
+  }
+
+  // Create a Project object from JSON
+  factory Project.fromJson(Map<String, dynamic> json) {
+  return Project(
+    json['name'] as String,
+    json['dueDate'] as String,
+    json['duration'].toString(), 
+  );
+}
+
 
   String getName() {
     return projectName;
@@ -19,23 +42,12 @@ class Project extends Calendar {
 
   DateTime getProjectDueDate() {
     return projectDueDate;
-  }
+  } 
 
-  String getDuration() {
+  double getDuration() {
     return projectDuration;
   }
 
-  static void setName(String newName) {
-    projectName = newName;
-  }
-
-  static void setProjectDueDate(DateTime newProjectDueDate) {
-    projectDueDate = newProjectDueDate;
-  }
-
-  static void setDuration(String newDuration){
-    projectDuration = newDuration;
-  }
   List<double> generateProjectSchedule(double sessionLength, double maxVal, double motivation,) {
   // Calculate timePeriod as number of days until due date 
     DateTime now = DateTime.now();
@@ -44,7 +56,7 @@ class Project extends Calendar {
   
 
     // Total work time in minutes (used to be in hours)
-    double totalLength = (double.parse(projectDuration)).round().toDouble();
+    double totalLength = (projectDuration);
     List<double> finalhoursAvailable = [];
     for(int i = 0; i<timePeriod; i++){
       finalhoursAvailable.add(1000); // 100 hours available for each day (this is just a placeholder, you can change it to the actual hours available)
@@ -52,14 +64,23 @@ class Project extends Calendar {
   
 
     return fixCalendar(sessionLength,  timePeriod, maxVal, motivation,totalLength, finalhoursAvailable);
-}
+  }
+
   int gettotalLength(){
-    int totalLength = (double.parse(projectDuration) * 60).round();
+    int totalLength = (projectDuration * 60).round();
     return totalLength;
   }
-   static fromJson(projectMap) {}
 
-  toJson() {}
+  Future<void> saveProjectsToJson() async {
+    final projectListJson = ProjectList.projects.map((p) => p.toJson()).toList();
+    await projectRegistry.prefsWithCache.setString('projects', jsonEncode(projectListJson));
+  }
 
+  Future<void> loadProjectsFromJson(String json) async {
+    final List<dynamic> decodedProjects = jsonDecode(json);
+    projectList = decodedProjects.map((json) => Project.fromJson(json)).toList().cast<Project>();
+    for (var project in projectList) {
+      ProjectList.addToProjectList(project);
+    }
+  } 
 }
-
