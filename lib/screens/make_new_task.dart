@@ -116,7 +116,7 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
                 }
                 else{
                   var project = Project(nameController.text, dateController.text, lengthController.text); 
-                  project.setDuration(double.parse(lengthController.text) as String); //sets the duration of the project
+                  project.setDuration(lengthController.text); //sets the duration of the project
                   ProjectList.addToProjectList(project);
                   ProjectRegistry().saveProjectsToSharedPreferences();  //adds the project to the list so it can be displayed on the calendar page
                   finishProjectCreation();

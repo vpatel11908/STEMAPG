@@ -56,7 +56,7 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
       );
     }
     
-    Project projectCalendar =  Project("Name", "2025-05-23", "Duration");
+    Project projectCalendar =  Project("Name", "2025-05-23", "10.0"); // problematic line(s)?
     List<double> finalHoursList = projectCalendar.generateProjectSchedule(1, 100, 1);
 
 
@@ -100,7 +100,7 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
                         Card(
                           child: ListTile(
                             title: Text('Day ${i + 1}'),
-                            subtitle: Text('Work hours: ${finalHoursList[i]}'),
+                            subtitle: Text('Work minutes: ${finalHoursList[i]}'),
                             trailing: const Icon(Icons.info),
                           ),
                         ),
@@ -126,4 +126,4 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
       ),
     );
   }
-}  
+}

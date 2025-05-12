@@ -7,15 +7,16 @@ import 'shared_preferences.dart';
 class Project extends Calendar {
   late String projectName;
   late DateTime projectDueDate;
-  late double projectDuration = 0.0;
+  late double projectDuration;
   List<Project> projectList = [];
   final projectRegistry = ProjectRegistry(); // An instance of ProjectRegistry
 
   Project(String name, String dueDate, String duration) {
-  projectName = name;
-  projectDueDate = DateTime.parse(dueDate);
-  projectDuration = double.parse(duration);
-  projectList.add(this);
+    // Constructor to initialize the project
+    projectName = name;
+    projectDueDate = DateTime.parse(dueDate);
+    projectDuration = double.parse(duration);
+    projectList.add(this);
 }
    // Convert a Project object to JSON
   Map<String, dynamic> toJson() {
