@@ -5,9 +5,9 @@ import 'shared_preferences.dart';
 
 //stores the data for the projects that the user creates
 class Project extends Calendar {
-  late final String projectName;
-  late final DateTime projectDueDate;
-  late final double projectDuration;
+  late String projectName;
+  late DateTime projectDueDate;
+  late double projectDuration = 0.0;
   List<Project> projectList = [];
   final projectRegistry = ProjectRegistry(); // An instance of ProjectRegistry
 
@@ -48,6 +48,17 @@ class Project extends Calendar {
     return projectDuration;
   }
 
+  void setName(String newName) {
+    projectName = newName;
+  }
+
+  void setProjectDueDate(DateTime newProjectDueDate) {
+    projectDueDate = newProjectDueDate;
+  }
+
+  void setDuration(String newDuration){
+    projectDuration = double.parse(newDuration);
+  }
   List<double> generateProjectSchedule(double sessionLength, double maxVal, double motivation,) {
   // Calculate timePeriod as number of days until due date 
     DateTime now = DateTime.now();
@@ -56,7 +67,7 @@ class Project extends Calendar {
   
 
     // Total work time in minutes (used to be in hours)
-    double totalLength = (projectDuration);
+    double totalLength = (projectDuration).round().toDouble();
     List<double> finalhoursAvailable = [];
     for(int i = 0; i<timePeriod; i++){
       finalhoursAvailable.add(1000); // 100 hours available for each day (this is just a placeholder, you can change it to the actual hours available)
@@ -67,7 +78,7 @@ class Project extends Calendar {
   }
 
   int gettotalLength(){
-    int totalLength = (projectDuration * 60).round();
+    int totalLength = ((projectDuration) * 60).round();
     return totalLength;
   }
 
