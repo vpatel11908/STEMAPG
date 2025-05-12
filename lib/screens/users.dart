@@ -13,7 +13,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-// Widget to log in to an account
+// Widget let the user to log in to an account, data not saved yet (future step)
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
@@ -59,6 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(height: 20), 
                     ElevatedButton(
+                      //saves the login info from the text controllers as variables and moves to the create task page
                       onPressed: () {
                         var username = textController.text;
                         var password = secondController.text;

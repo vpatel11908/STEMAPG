@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'projects.dart';
+import 'project.dart';
 import 'projectList.dart';
 
-
+//stores the project data using shared preferences
 class ProjectRegistry {
   static List<Project> projectList = [];
 
@@ -15,7 +15,8 @@ class ProjectRegistry {
   Future<void> loadProjectsFromSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     final String? projectsJson = prefs.getString('projects');
-
+    
+    //ensure there is something in the projectsJson before decoding and loading the data into the projectList
     if (projectsJson != null) {
       final List<dynamic> decodedProjects = jsonDecode(projectsJson);
       ProjectList.projects = decodedProjects.map((json) => Project.fromJson(json)).toList().cast<Project>();
@@ -31,6 +32,7 @@ class ProjectRegistry {
     await prefs.setString('projects', projectsJson);
   }
 
+  //create an instance of the ProjectRegistry
   static create() {
     return ProjectRegistry();
   }

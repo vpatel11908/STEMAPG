@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stemcalendar/data/projects.dart';
-import 'package:stemcalendar/data/shared_preferences.dart';
+import 'package:stemcalendar/data/project.dart';
+import 'package:stemcalendar/data/project_registry.dart';
 import 'package:stemcalendar/screens/make_new_task.dart';
 import 'package:stemcalendar/screens/project_page.dart';
 import '../data/projectList.dart';
@@ -13,11 +13,13 @@ class CalendarPage extends StatefulWidget {
   State<CalendarPage> createState() => _CalendarPageState();
 }
 
+//creates the calendar page and allows the user to see the list of projects and their due dates and go to the add new project page
 class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver {
   late ProjectRegistry registry;
   Widget? activeWidget;
   String? get key => null;
 
+  //helper method that watches the state of the app 
   @override
   void initState() {
     super.initState();
@@ -25,13 +27,14 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
     _initProjectRegistry();
   }
 
+  //initializes the project registry and loads the projects from shared preferences on the opening of this screen
    Future<void> _initProjectRegistry() async {
     registry = await ProjectRegistry.create();
     await registry.loadProjectsFromSharedPreferences();
     setState(() {});
   } 
 
-  //saves the app when it is closed or in the backgronund
+  //saves the app when the observer notices that the app is closed or open in the background 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused || state == AppLifecycleState.detached) {
@@ -56,10 +59,11 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
       );
     }
     
-    Project projectCalendar =  Project("Name", "2025-05-23", "10.0"); // problematic line(s)?
+    //creates a project calendar and uses the generateProjectSchedule method to get the list of hours that the user must work on the project each day
+    Project projectCalendar =  Project("Name", "2025-05-23", "10.0"); 
     List<double> finalHoursList = projectCalendar.generateProjectSchedule(1, 100, 1);
 
-
+    //The calendar list page
     return Scaffold(
       appBar: AppBar(
         title: const Text('Calendar Page'),
@@ -73,7 +77,8 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
               children: <Widget>[
                   Column(
                     children: <Widget>[
-                      for (int i = 0; i < Pjl.length; i++)
+                      //display each project in the project list
+                      for (int i = 0; i < Pjl.length; i++) 
                         Card(
                           child: ListTile(
                             title: Text(Pjl[i].getName()),
@@ -96,7 +101,8 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
                   const SizedBox(height: 20), // Spacing between cards
                   Column(
                     children: <Widget>[
-                      for (int i = 0; i < finalHoursList.length; i++)
+                      for (int i = 0; i < finalHoursList.length; i++) //display the hours that the user must work on the project each day 
+                      //each day is given a number from 1 to the number of days until the due date
                         Card(
                           child: ListTile(
                             title: Text('Day ${i + 1}'),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:stemcalendar/data/projects.dart';
+import 'package:stemcalendar/data/project.dart';
 
+//shows the name and duration of the project that was clicked on in the project list to display this page
 class ProjectPage extends StatefulWidget {
   final Project project; //stores the data for the project that is passed to the project page
   const ProjectPage({super.key, required this.project});
@@ -14,7 +15,7 @@ class _ProjectPageState extends State<ProjectPage> {
   
   @override
   //widget that allows the user to see the list of tasks and when they should be completed by 
-  //in the future, this would be a calendar or allow the user to pair the app with their calendar
+  //in the future, this would be aplace for the user to edit the project
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

@@ -1,4 +1,6 @@
 import 'dart:math';
+
+//generates the user's s curve, will be based on their quiz results and preferences once the quiz is implemented
 class BackendSCurve {
   // Method to calculate the midpoint - the motivation determins this like the time period is just for the sake of keeping a standardized midpoint
   static double calculateMidpoint(double motivation, double timePeriod) {

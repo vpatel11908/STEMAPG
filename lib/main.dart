@@ -3,8 +3,9 @@ import 'package:stemcalendar/data/projectList.dart';
 import 'package:stemcalendar/screens/calendar_page.dart';
 import 'package:stemcalendar/screens/make_new_task.dart';
 import 'data/calendar.dart';
-import 'data/shared_preferences.dart';
+import 'data/project_registry.dart';
 
+//ensure the shared preferneces are initialized and loaded into the project list, then run the app
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final registry = ProjectRegistry();
@@ -15,6 +16,7 @@ void main() async {
      theme: ThemeData(scaffoldBackgroundColor: Color.fromARGB(255, 226, 227, 197)),
   ));
 
+  //s-curve data
   double motivation = 1;
   double sessionLength = 1;
   double timePeriod = 100;
@@ -25,7 +27,7 @@ void main() async {
     hoursAvailable.add(100);
   }
   Calendar calendar = Calendar();
-  //Prints out the minutes of work to be done like each day --- the check for if it can fit within the allotted hours still needs to be added
+  //Prints out the minutes of work to be done like each day --- the check for if it can fit within the allotted hours will be added after the MVP
   List<double> curveValues = calendar.fixCalendar(sessionLength, timePeriod, maxVal, motivation, totalLength, hoursAvailable);
   print('Minutes: $curveValues');
 }
@@ -33,7 +35,7 @@ void main() async {
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
-  //algorithm to make the s curve
+//algorithm to make the s curve
 List<double> sCurveValues(double maxVal, double midpoint, double growthRate, double endPeriod) {
   List<double> values = [];
   for (double t = 0; t <= endPeriod; t++) {
@@ -43,8 +45,9 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
   return values;
 }
 
+  //the home page of the app
    @override
-     Widget build(BuildContext context) { //the home page of the app
+     Widget build(BuildContext context) { 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 226, 227, 197),
@@ -60,7 +63,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
               Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),
                 child: Icon(
-                  Icons.edit_calendar, // will be changed to the logo if we make one
+                  Icons.edit_calendar, //icon for the app
                   color: Color.fromARGB(255, 70, 52, 237),
                   size: 150,
                 ),
@@ -90,7 +93,8 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
                   SizedBox(width: 40), 
                   ElevatedButton( //button to navigate to the calendar page
                     onPressed: () {
-                       if(ProjectList.projects.isEmpty) {
+                      //make sure the user has created a project before they can access the calendar
+                       if(ProjectList.projects.isEmpty) { 
                         const emptyList = SnackBar(
                         content:Text('Please create a project first!'),
                         duration: Duration(seconds: 2),

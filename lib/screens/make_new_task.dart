@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:stemcalendar/data/projects.dart';
-import 'package:stemcalendar/data/shared_preferences.dart';
+import 'package:stemcalendar/data/project.dart';
+import 'package:stemcalendar/data/project_registry.dart';
 import 'package:stemcalendar/main.dart';
 import 'package:stemcalendar/screens/calendar_page.dart';
 import '../data/projectList.dart';
 
+//page to allow the user to create a new task by entering the name, due date, and estimated length of the task into the text fields
+//the data will be stored in the Projects class 
 class MakeNewTaskPage extends StatefulWidget {
   const MakeNewTaskPage({super.key});
 
@@ -24,15 +26,17 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
     late TextEditingController dateController = TextEditingController();
     late TextEditingController lengthController = TextEditingController();
 
-
+    //function that will be called when the user presses the create task button to ensure that they can not mess with their previously entered data
     void finishProjectCreation() {
     Navigator.pushAndRemoveUntil<MainApp>(
     context,
-    MaterialPageRoute<MainApp>(builder: (BuildContext context) => const CalendarPage()),
+    MaterialPageRoute<MainApp>(builder: (BuildContext context) => const CalendarPage()), 
+    //makes it so the user can not go back to the make new task page that contains their data
     (Route<dynamic> route) => false,
     );
     }
 
+  //method to dispose of the text editing controllers when the widget is removed from the widget tree
     @override
     void dispose() {
       nameController.dispose();
@@ -41,7 +45,7 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
       super.dispose();
   }
 
-
+    //make new task page UI
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add a New Project'),
@@ -58,7 +62,6 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
               decoration: const InputDecoration(
                 labelText: 'Project Name',
                 border: OutlineInputBorder(),
-
               ),
         ),
          SizedBox(height: 20),
@@ -72,13 +75,12 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
               ),
         ),
          SizedBox(height: 20),
-         Text('Enter the estimated length of the project in hours :'),
+         Text('Enter the estimated length of the project in hours:'),
         TextField( //allows the user to enter the estimated length of the project
               controller: lengthController,
               decoration: const InputDecoration(
                 labelText: 'Estimated Length of the Project',
                 border: OutlineInputBorder(),
-
               ),
         ),
         SizedBox(height: 20),
@@ -101,6 +103,7 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
             else{
               //if the text fields contain text, check if the date is in the correct format
               if (RegExp(r'^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$').hasMatch(dateController.text)) {
+                //check if the duration is a number, so it does not throw a type error
                 if (double.tryParse(lengthController.text) == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -115,11 +118,14 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
                   return;
                 }
                 else{
+                  //create a project and add it to the project list if all the data is valid
                   var project = Project(nameController.text, dateController.text, lengthController.text); 
                   project.setDuration(lengthController.text); //sets the duration of the project
-                  ProjectList.addToProjectList(project);
-                  ProjectRegistry().saveProjectsToSharedPreferences();  //adds the project to the list so it can be displayed on the calendar page
+                  ProjectList.addToProjectList(project); //adds the project to the project list so it can be displayed on the calendar page
+                  ProjectRegistry().saveProjectsToSharedPreferences();  //adds the project to the shared preferences 
                   finishProjectCreation();
+                  dispose();
+                  //clears the text fields after the project is created and navigates to the calendar page
                 }  
               }
               else {
