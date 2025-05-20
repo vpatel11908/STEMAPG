@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stemcalendar/data/project.dart';
 import 'package:stemcalendar/data/project_registry.dart';
-import 'package:stemcalendar/screens/make_new_task.dart';
 import 'package:stemcalendar/screens/project_page.dart';
 import '../data/projectList.dart';
 
@@ -58,10 +57,6 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
         child: Text('Please add a project first!'), //make a snackbar
       );
     }
-    
-    //creates a project calendar and uses the generateProjectSchedule method to get the list of hours that the user must work on the project each day
-    Project projectCalendar =  Project("Name", "2025-05-23", "10.0"); 
-    List<double> finalHoursList = projectCalendar.generateProjectSchedule(1, 100, 1);
 
     //The calendar list page
     return Scaffold(
@@ -98,38 +93,13 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
                         ),
                     ]
                   ),
-                  const SizedBox(height: 20), // Spacing between cards
-                  Column(
-                    children: <Widget>[
-                      for (int i = 0; i < finalHoursList.length; i++) //display the hours that the user must work on the project each day 
-                      //each day is given a number from 1 to the number of days until the due date
-                        Card(
-                          child: ListTile(
-                            title: Text('Day ${i + 1}'),
-                            subtitle: Text('Work minutes: ${finalHoursList[i]}'),
-                            trailing: const Icon(Icons.info),
-                          ),
-                        ),
-                  ],
-                ),
-                ElevatedButton( //button to add a new project
-                  onPressed: () {
-                    setState(() {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MakeNewTaskPage(),
-                        ),
-                      );
-                    });
-                  },
-                  child: const Text('Add a new Project'),
-                ),
-              ],
+                   const SizedBox(height: 20), // Spacing between cards 
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+       ),
+     );
+   }
 }
+                  
