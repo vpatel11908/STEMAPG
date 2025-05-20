@@ -1,18 +1,30 @@
 import 'backendscurve.dart';
 import 'dart:math';
+
+// This class is used to generate a calendar based on the S-curve values and time period for the user and project
 class Calendar {
+
+  // This function is used to get a value for the S-Curve, returns the session length
   double getSessionLength(double sessionLength) {
     return sessionLength;
   }
+
+  // This function is used to get a value for the S-Curve, returns the motivation
   double getMotivation(double motivation) {
     return motivation;
   }
+
+  // This function is used to get a value for the S-Curve, returns the max value
   double getMaxVal(double maxVal) {
     return maxVal;
   }
+
+  // This function is used to get a value for the S-Curve, returns the time period
   double getTimePeriod(double timePeriod) {
     return timePeriod;
   }
+
+  // This function is used to get a value for the S-Curve, returns the total length
   double getTotalLength(double totalLength) {
     return totalLength;
   }

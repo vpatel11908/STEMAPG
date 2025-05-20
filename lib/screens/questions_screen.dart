@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stemcalendar/data/questions.dart';
 
+//displays the quiz and allows the user to select answers to the questions from questions.dart
 class QuestionsScreen extends StatefulWidget {
   const QuestionsScreen({super.key});
 
