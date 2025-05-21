@@ -13,6 +13,17 @@ class ProjectPage extends StatefulWidget {
 class _ProjectPageState extends State<ProjectPage> {
   Widget? activeWidget;
   
+  late Project projectCalendar;
+  late List<double> finalHoursList;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize projectCalendar and finalHoursList here
+    projectCalendar = widget.project;
+    finalHoursList = projectCalendar.generateProjectSchedule(1, 100, 1);
+  }
+
   @override
   //widget that allows the user to see the list of tasks and when they should be completed by 
   //in the future, this would be aplace for the user to edit the project
@@ -32,8 +43,15 @@ class _ProjectPageState extends State<ProjectPage> {
           children: <Widget>[
             Column(
               children: <Widget>[
-                 Text ('Project Duration: ${widget.project.getDuration().toString()}'),
-                 //do something else here after the MVP, probably allow for the user to edit the project
+                 Text ('Total Project Duration: ${widget.project.getDuration().toString()}' ' hours'),
+                  for (int i = 0; i < finalHoursList.length; i++) //display the hours that the user must work on the project each day 
+                      //each day is given a number from 1 to the number of days until the due date
+                        Card(
+                          child: ListTile(
+                            title: Text('Day ${i + 1}'),
+                            subtitle: Text('Work minutes: ${finalHoursList[i]}'),
+                          ),
+                        ),
               ],
             ),
           ],
