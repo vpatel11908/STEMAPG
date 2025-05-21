@@ -4,6 +4,7 @@ import 'package:stemcalendar/screens/make_new_task.dart';
 import 'package:stemcalendar/screens/questions_screen.dart';
 import 'data/calendar.dart';
 import 'data/project_registry.dart';
+import 'data/projectList.dart';
 
 //ensure the shared preferneces are initialized and loaded into the project list, then run the app
 void main() async {
@@ -93,8 +94,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
                   SizedBox(width: 40), 
                   ElevatedButton( //button to navigate to the calendar page
                     onPressed: () {
-                      //make sure the user has created a project before they can access the calendar
-                       if(ProjectList.projects.isEmpty) { 
+                       if(ProjectList.projects.isEmpty) {
                         const emptyList = SnackBar(
                         content:Text('Please create a project first!'),
                         duration: Duration(seconds: 2),
