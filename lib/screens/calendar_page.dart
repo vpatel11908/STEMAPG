@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stemcalendar/data/project.dart';
 import 'package:stemcalendar/data/project_registry.dart';
+import 'package:stemcalendar/screens/make_new_task.dart';
 import 'package:stemcalendar/screens/project_page.dart';
 import '../data/projectList.dart';
 
@@ -10,11 +11,13 @@ class CalendarPage extends StatefulWidget {
   
   @override
   State<CalendarPage> createState() => _CalendarPageState();
+
 }
 
 //creates the calendar page and allows the user to see the list of projects and their due dates and go to the add new project page
 class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver {
   late ProjectRegistry registry;
+  List<Project> Pjl = ProjectList.getProjectList(); 
   Widget? activeWidget;
   String? get key => null;
 
@@ -32,6 +35,15 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
     await registry.loadProjectsFromSharedPreferences();
     setState(() {});
   } 
+  
+  //allows the user to remove the project from the list of projects
+  void _removeProject(Project project) {
+    // ignore: collection_methods_unrelated_type
+    Pjl.remove(project.getName());
+    setState(() {
+      registry.removeProject(project);
+    });
+  }
 
   //saves the app when the observer notices that the app is closed or open in the background 
   @override
@@ -39,6 +51,12 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
     if (state == AppLifecycleState.paused || state == AppLifecycleState.detached) {
       registry.saveProjectsToSharedPreferences(); 
     }
+  }
+
+  Future<void> _refreshProjects() async {
+    setState(() {
+      Pjl = ProjectList.getProjectList(); // Refresh the project list
+    });
   }
 
   @override
@@ -51,12 +69,53 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
     for(int i = 0; i<100; i++){
       hoursAvailable.add(100);
     }
-    List<Project> Pjl = ProjectList.getProjectList(); 
+
+    // if the list is empty, display a message to the user telling them to adda project before trying to view the calendar
+    //handles the case where the user deletes all projects in the calendar page while in the calendar page
     if (Pjl.isEmpty) {
-      return const Center(
-        child: Text('Please add a project first!'), //make a snackbar
+      return Scaffold(
+      appBar: AppBar(
+        title: const Text('Calendar Page'),
+        backgroundColor: Color.fromARGB(255, 226, 227, 197)
+      ),
+      body: 
+      RefreshIndicator(
+        onRefresh: _refreshProjects,
+        child:
+      ListView(
+        physics: const BouncingScrollPhysics(),
+        children: [
+          Center(
+            child: Column(
+              children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Text('No projects available'),
+                      SizedBox(height: 20), 
+                      ElevatedButton( 
+                        onPressed: () {
+                          setState(() {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MakeNewTaskPage(),
+                              ),
+                            );
+                          });
+                        },
+                        child: const Text('Add New Project'),
+                      ),
+                    ]
+                  ),
+                ],
+              ),
+            ),
+          ],
+       ),
+      ),
       );
     }
+           
 
     //The calendar list page
     return Scaffold(
@@ -64,7 +123,11 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
         title: const Text('Calendar Page'),
         backgroundColor: Color.fromARGB(255, 226, 227, 197)
       ),
-      body: ListView(
+      body: 
+      RefreshIndicator(
+        onRefresh: _refreshProjects,
+        child:
+      ListView(
         physics: const BouncingScrollPhysics(),
         children: [
           Center(
@@ -78,7 +141,14 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
                           child: ListTile(
                             title: Text(Pjl[i].getName()),
                             subtitle: Text(Pjl[i].getProjectDueDate().toString()),
-                            trailing: const Icon(Icons.info),
+                            trailing: 
+                            CheckboxWidget(
+                              project: Pjl[i], 
+                              onProjectRemoved: () { 
+                                _removeProject(Pjl[i]); // Remove the project from the list
+                                _refreshProjects(); // Refresh the project list
+                               },
+                            ),
                             onTap: () {
                               setState(() {
                                 Navigator.push(
@@ -94,12 +164,54 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
                     ]
                   ),
                    const SizedBox(height: 20), // Spacing between cards 
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MakeNewTaskPage(),
+                        ),
+                      );
+                    },
+                    child: Text('Add a new project'),
+                  ),
                 ],
               ),
             ),
           ],
        ),
+      ), 
      );
    }
 }
-                  
+
+class CheckboxWidget extends StatefulWidget {
+  const CheckboxWidget({super.key, required this.project, required this.onProjectRemoved});
+  final Project project; // The project associated with this checkbox
+  final VoidCallback onProjectRemoved; // Callback to notify the parent to refresh projects
+
+  @override
+  State<CheckboxWidget> createState() => _CheckboxWidgetState();
+
+}
+
+class _CheckboxWidgetState extends State<CheckboxWidget> {
+  bool isChecked = false;
+  Project get project => widget.project;
+  List<Project> Pjl = ProjectList.getProjectList();
+
+  @override
+  Widget build(BuildContext context) {
+    return Checkbox(
+      value: isChecked,
+      onChanged: (bool? value) {
+        if (mounted) {
+          setState(() {
+            isChecked = value ?? true;
+          });
+        }
+        widget.onProjectRemoved(); // Notify the parent to refresh projects
+      },
+    );
+  }
+}

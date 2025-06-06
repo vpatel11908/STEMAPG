@@ -26,7 +26,7 @@ class ProjectRegistry {
   }
 
   // Save projects to SharedPreferences
-  Future<void> saveProjectsToSharedPreferences() async {
+   Future<void> saveProjectsToSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     final String projectsJson = jsonEncode(ProjectList.projects.map((project) => project.toJson()).toList());
     await prefs.setString('projects', projectsJson);
@@ -35,6 +35,11 @@ class ProjectRegistry {
   //create an instance of the ProjectRegistry
   static create() {
     return ProjectRegistry();
+  }
+
+  void removeProject(Project project) {
+    ProjectList.projects.remove(project);
+    saveProjectsToSharedPreferences();
   }
 }
 
