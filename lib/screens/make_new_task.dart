@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stemcalendar/data/project.dart';
 import 'package:stemcalendar/data/project_registry.dart';
-import 'package:stemcalendar/main.dart';
 import 'package:stemcalendar/screens/calendar_page.dart';
 import '../data/projectList.dart';
 
@@ -28,13 +27,15 @@ class _MakeNewTaskPageState extends State<MakeNewTaskPage> {
 
     //function that will be called when the user presses the create task button to ensure that they can not mess with their previously entered data
     void finishProjectCreation() {
-    Navigator.pushAndRemoveUntil<MainApp>(
-    context,
-    MaterialPageRoute<MainApp>(builder: (BuildContext context) => const CalendarPage()), 
-    //makes it so the user can not go back to the make new task page that contains their data
-    (Route<dynamic> route) => false,
-    );
-    }
+    if (!mounted) return; // make sure the widget is still there
+    setState(() {
+      // go to the calendar page
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CalendarPage()),
+      );
+    });
+  }
 
   //method to dispose of the text editing controllers when the widget is removed from the widget tree
     @override

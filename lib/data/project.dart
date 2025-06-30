@@ -10,14 +10,19 @@ class Project extends Calendar {
   late double projectDuration;
   List<Project> projectList = [];
   final projectRegistry = ProjectRegistry(); // An instance of ProjectRegistry
+   bool isCompleted;
 
-  Project(String name, String dueDate, String duration) {
+  Project(String name, String dueDate, String duration, {this.isCompleted = false}) {
     // Constructor to initialize the project
     projectName = name;
     projectDueDate = DateTime.parse(dueDate);
     projectDuration = double.parse(duration);
     projectList.add(this);
 }
+  bool getIsCompleted() {
+    return isCompleted;
+  }
+  
    // Convert a Project object to JSON
   Map<String, dynamic> toJson() {
     return {

@@ -11,7 +11,6 @@ class CalendarPage extends StatefulWidget {
   
   @override
   State<CalendarPage> createState() => _CalendarPageState();
-
 }
 
 //creates the calendar page and allows the user to see the list of projects and their due dates and go to the add new project page
@@ -21,7 +20,7 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
   Widget? activeWidget;
   String? get key => null;
 
-  //helper method that watches the state of the app 
+  //method that watches the state of the app 
   @override
   void initState() {
     super.initState();
@@ -38,12 +37,12 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
   
   //allows the user to remove the project from the list of projects
   void _removeProject(Project project) {
-    // ignore: collection_methods_unrelated_type
-    Pjl.remove(project.getName());
-    setState(() {
-      registry.removeProject(project);
-    });
-  }
+  Pjl.remove(project); 
+  setState(() {
+    registry.removeProject(project);
+  });
+}
+
 
   //saves the app when the observer notices that the app is closed or open in the background 
   @override
@@ -196,21 +195,18 @@ class CheckboxWidget extends StatefulWidget {
 }
 
 class _CheckboxWidgetState extends State<CheckboxWidget> {
-  bool isChecked = false;
-  Project get project => widget.project;
-  List<Project> Pjl = ProjectList.getProjectList();
-
   @override
   Widget build(BuildContext context) {
     return Checkbox(
-      value: isChecked,
+      value: widget.project.isCompleted,
       onChanged: (bool? value) {
-        if (mounted) {
-          setState(() {
-            isChecked = value ?? true;
-          });
+        setState(() {
+          widget.project.isCompleted = value ?? true;
+        });
+
+        if (widget.project.getIsCompleted()) {
+          widget.onProjectRemoved();
         }
-        widget.onProjectRemoved(); // Notify the parent to refresh projects
       },
     );
   }
