@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "991651846135",
+    "firebase_url": "https://varinyprojectplanner-default-rtdb.firebaseio.com",
+    "project_id": "varinyprojectplanner",
+    "storage_bucket": "varinyprojectplanner.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991651846135:android:ac9723d0a6e38b2e4cc0f2",
+        "android_client_info": {
+          "package_name": "com.example.stemcalendar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2xh-f84WXQaDDgLMgwYjLOK5y0bn-6ZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

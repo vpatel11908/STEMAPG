@@ -32,7 +32,7 @@ class _CalendarPageState extends State<CalendarPage> with WidgetsBindingObserver
    Future<void> _initProjectRegistry() async {
     registry = await ProjectRegistry.create();
     await registry.loadProjectsFromSharedPreferences();
-    setState(() {});
+
   } 
   
   //allows the user to remove the project from the list of projects
@@ -204,7 +204,7 @@ class _CheckboxWidgetState extends State<CheckboxWidget> {
         setState(() {
           widget.project.isCompleted = value ?? true;
         });
-        
+
         if (widget.project.getIsCompleted()) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             widget.onProjectRemoved();

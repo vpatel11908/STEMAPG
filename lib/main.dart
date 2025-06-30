@@ -5,12 +5,18 @@ import 'package:stemcalendar/screens/questions_screen.dart';
 import 'data/calendar.dart';
 import 'data/project_registry.dart';
 import 'data/projectList.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 //ensure the shared preferneces are initialized and loaded into the project list, then run the app
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final registry = ProjectRegistry();
-  await registry.loadProjectsFromSharedPreferences();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await ProjectRegistry.create(); // Initialize the project registry
+  final projectRegistry = ProjectRegistry();
+  await projectRegistry.loadProjectsFromSharedPreferences(); // Load the project list from shared preferences
   runApp(MaterialApp(
     title: 'Navigation Basics',
     home: MainApp(),
@@ -53,6 +59,7 @@ List<double> sCurveValues(double maxVal, double midpoint, double growthRate, dou
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 226, 227, 197),
       ),
+      
       body:
       ListView(
         physics: const BouncingScrollPhysics(),
