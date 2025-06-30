@@ -200,12 +200,15 @@ class _CheckboxWidgetState extends State<CheckboxWidget> {
     return Checkbox(
       value: widget.project.isCompleted,
       onChanged: (bool? value) {
+        if (!mounted) return; 
         setState(() {
           widget.project.isCompleted = value ?? true;
         });
-
+        
         if (widget.project.getIsCompleted()) {
-          widget.onProjectRemoved();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            widget.onProjectRemoved();
+          });
         }
       },
     );
