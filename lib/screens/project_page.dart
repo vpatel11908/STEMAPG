@@ -21,7 +21,7 @@ class _ProjectPageState extends State<ProjectPage> {
     super.initState();
     // Initialize projectCalendar and finalHoursList here
     projectCalendar = widget.project;
-    finalHoursList = projectCalendar.generateProjectSchedule(1, 100, 1);
+    finalHoursList = projectCalendar.generateProjectSchedule(1, 200, 1);
   }
 
   @override
