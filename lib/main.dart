@@ -4,15 +4,12 @@ import 'package:stemcalendar/screens/make_new_task.dart';
 import 'data/calendar.dart';
 import 'data/project_registry.dart';
 import 'data/projectList.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+
 
 //ensure the shared preferneces are initialized and loaded into the project list, then run the app
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  
   await ProjectRegistry.create(); // Initialize the project registry
   final projectRegistry = ProjectRegistry();
   await projectRegistry.loadProjectsFromSharedPreferences(); // Load the project list from shared preferences
